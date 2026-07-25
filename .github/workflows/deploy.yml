@@ -1,0 +1,50 @@
+name: Deploy to AWS
+
+# Auto-deploy the storefront to https://dristifashions.com on every push to main.
+# Also runnable on demand from the Actions tab ("Run workflow").
+#
+# Credentials come from two repo secrets (Settings -> Secrets -> Actions):
+#   AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY
+# for the tightly-scoped IAM user `github-actions-dristhi-deploy`, which may only
+# stage the build to the deploy/ S3 prefix and run the one SSM deploy command.
+# The actual deploy logic lives in scripts/deploy.mjs (same as `npm run deploy`).
+
+on:
+  push:
+    branches: [main]
+    # Skip runs that can't change the deployed output (docs/CI-only edits).
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - '.gitattributes'
+  workflow_dispatch:
+
+# Never let two deploys run at once; let an in-flight one finish rather than
+# cancelling it half-way through swapping the live directory.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ap-south-1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build and deploy to AWS
+        run: npm run deploy
