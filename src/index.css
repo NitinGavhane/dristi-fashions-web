@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+    /* Live height of the sticky header, published by <Header>. Anything that
+       pins itself below the header (sticky order summaries) offsets by this so
+       it can never slide underneath. The fallback covers the first paint. */
+    --header-height: 7.5rem;
+  }
+
+  html {
+    /*
+     * Nothing in this storefront is meant to scroll sideways; a single stray
+     * element should not hand the whole page a horizontal scrollbar.
+     *
+     * `clip` rather than `hidden` deliberately — `hidden` turns the element
+     * into a scroll container and breaks the sticky header. Declaring it on
+     * <html> also stops <body>'s overflow propagating to the viewport, so this
+     * one rule is the whole story.
+     */
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #fbf8ff;
+    color: #181a2d;
+  }
+
+  h1, h2, h3, h4, .font-playfair {
+    font-family: var(--font-serif);
+  }
+
+  /* Media never dictates the layout width — it fits whatever box it is in. */
+  img, svg, video, canvas, iframe {
+    max-width: 100%;
+  }
+
+  img, video {
+    height: auto;
+  }
+
+  /* Long unbroken strings (order numbers, referral links, emails) wrap instead
+     of pushing their container past the viewport. */
+  h1, h2, h3, h4, h5, h6, p, span, dd, dt, li, button, a, label {
+    overflow-wrap: break-word;
+  }
+
+  /* Flex/grid children default to min-width:auto, which lets a wide <select>
+     or a long word blow the track out. Panels opt back in where needed. */
+  input, select, textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+}
+
+/* Mobile Safari zooms the viewport whenever a focused field is under 16px,
+   which leaves the page scrolled sideways once the field blurs. Keeping
+   controls at 16px on small screens avoids the zoom entirely.
+
+   Deliberately unlayered: the fields carry `text-xs`/`text-sm` utilities, and
+   utilities outrank @layer base, so this has to sit outside the layer to win. */
+@media (max-width: 640px) {
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Custom Design Utilities */
+.font-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #fed255 0%, #ecc246 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #fed255 0%, #755b00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navy-gradient {
+  background: linear-gradient(180deg, #0d1648 0%, #181a2d 100%);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #fed255 0%, #ecc246 100%);
+  color: #0d1648;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.875rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 8px rgba(8, 16, 58, 0.12);
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.25rem;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 12px rgba(8, 16, 58, 0.18);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #0d1648;
+  border: 1px solid #755b00;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.25rem;
+}
+
+.btn-outline:hover {
+  background: linear-gradient(135deg, #fed255 0%, #ecc246 100%);
+  color: #0d1648;
+  border-color: transparent;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid rgba(198, 197, 208, 0.35);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover:hover {
+  box-shadow: 0 8px 24px rgba(8, 16, 58, 0.08);
+  transform: translateY(-2px);
+}
+
+.badge-new {
+  background-color: #0d1648;
+  color: #ffe08e;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.badge-limited {
+  background-color: #ffffff;
+  color: #0d1648;
+  border: 1px solid #0d1648;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.input-field {
+  background-color: #ffffff;
+  border: 1px solid #c6c5d0;
+  border-radius: 0.25rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: #181a2d;
+  transition: all 0.2s ease;
+}
+
+.input-field::placeholder {
+  color: #767680;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #755b00;
+  box-shadow: 0 0 0 2px rgba(254, 210, 85, 0.4);
+}
+
+.navy-shadow-hover {
+  box-shadow: 0 8px 24px rgba(8, 16, 58, 0.08);
+}
+
+/* Custom Scrollbar for elegant horizontal chip bars & drawers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Shimmer animation for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f4f2ff 25%, #e6e6ff 37%, #f4f2ff 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}
+
+/*
+ * Overlays that normally appear on :hover — the product card's quick-add bar,
+ * the carousel arrows. A touch device has no hover state, so without this the
+ * control is permanently invisible and the feature is simply unreachable.
+ */
+.hover-reveal {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.group:hover .hover-reveal,
+.group:focus-within .hover-reveal {
+  opacity: 1;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .hover-reveal {
+    opacity: 1;
+  }
+}
+
+/* Horizontal rails (category chips, filter bars) that must never widen the
+   page — they scroll inside themselves instead. */
+.scroll-rail {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
