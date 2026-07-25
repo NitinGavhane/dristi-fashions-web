@@ -99,8 +99,12 @@ async function main() {
   const tarball = join(staging, 'dristi-web.tgz');
   try {
     step('Packing dist/');
-    // System tar (present on Windows 10+, macOS, Linux, Git Bash).
-    run('tar', ['-czf', tarball, '-C', DIST, '.']);
+    // System tar (present on Windows 10+, macOS, Linux, Git Bash). The archive
+    // name is passed RELATIVE (cwd = staging) on purpose: GNU tar treats an
+    // absolute Windows path like `C:\...` in -f as a remote `host:path` and
+    // fails with "Cannot connect to C:". A relative -f dodges that; -C may stay
+    // absolute (it is not parsed for host:path), forward-slashed for MSYS tar.
+    run('tar', ['-czf', 'dristi-web.tgz', '-C', DIST.replace(/\\/g, '/'), '.'], { cwd: staging });
 
     step('Uploading to S3');
     run(AWS, ['s3', 'cp', tarball, `s3://${BUCKET}/${KEY}`, '--region', REGION]);
