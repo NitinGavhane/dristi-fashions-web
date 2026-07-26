@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
 import { AuthLayout, OtpInput, authInputClass, authLabelClass } from '../components/common/AuthLayout';
 import { useStore } from '../context/StoreContext';
@@ -9,6 +9,8 @@ interface LoginPageProps {
 }
 
 type Mode = 'password' | 'otp';
+
+const RESEND_COOLDOWN = 30;
 
 export const LoginPage: React.FC<LoginPageProps> = ({ currentPath, onNavigate }) => {
   const { login, sendLoginOtp, loginWithOtp } = useStore();
@@ -25,6 +27,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ currentPath, onNavigate })
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown(c => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   const goAfterLogin = () => onNavigate(next || '/profile');
 
@@ -209,17 +218,25 @@ export const LoginPage: React.FC<LoginPageProps> = ({ currentPath, onNavigate })
           <div className="flex items-center justify-between text-[11px]">
             <button
               type="button"
-              onClick={() => setOtpSent(false)}
+              onClick={() => {
+                setOtpSent(false);
+                setOtp('');
+                setCooldown(0);
+              }}
               className="text-[#e0e0fb] hover:text-white underline"
             >
               Change email
             </button>
             <button
               type="button"
-              onClick={() => void sendLoginOtp(email.trim())}
-              className="text-[#ffe08e] hover:underline"
+              disabled={cooldown > 0}
+              onClick={() => {
+                void sendLoginOtp(email.trim());
+                setCooldown(RESEND_COOLDOWN);
+              }}
+              className="text-[#ffe08e] hover:underline disabled:opacity-50 disabled:no-underline"
             >
-              Resend code
+              {cooldown > 0 ? `Resend in ${cooldown}s` : 'Resend code'}
             </button>
           </div>
         </form>
