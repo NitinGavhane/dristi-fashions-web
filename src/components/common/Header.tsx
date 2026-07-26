@@ -160,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
             360px screen, so keeping it there pushed the wordmark straight into
             the action buttons.
           */}
-          <div className="flex min-w-0 flex-1 justify-center lg:flex-none lg:justify-start">
+          <div className="flex min-w-0 flex-1 justify-start lg:flex-none lg:justify-start">
             <button
               onClick={() => onNavigate('/')}
               className="inline-flex min-w-0 max-w-full items-center focus:outline-none"

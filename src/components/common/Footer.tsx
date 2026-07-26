@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { FileText, Loader2, Lock, Mail, RefreshCw, Truck } from 'lucide-react';
+import { Loader2, Mail } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { contactApi } from '../../lib/api';
 import { errorMessage } from '../../lib/apiClient';
-import { formatCurrency } from '../../lib/format';
 import { DristhiLogo } from './DristhiLogo';
 
 interface FooterProps {
@@ -11,7 +10,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const { showToast, deliverySettings } = useStore();
+  const { showToast } = useStore();
   const [email, setEmail] = useState('');
   const [subscribing, setSubscribing] = useState(false);
 
@@ -30,16 +29,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       setSubscribing(false);
     }
   };
-
-  // Mirrors the store's actual delivery configuration. With no fee configured
-  // it falls back to the neutral "tracked delivery" rather than advertising
-  // delivery as free.
-  const deliveryNote =
-    !deliverySettings || deliverySettings.fee <= 0
-      ? 'Tracked delivery'
-      : deliverySettings.freeThreshold !== null
-        ? `Free delivery above ${formatCurrency(deliverySettings.freeThreshold)}`
-        : `Flat ${formatCurrency(deliverySettings.fee)} delivery`;
 
   return (
     <footer className="bg-[#0d1648] text-[#f4f2ff] pt-12 sm:pt-16 pb-12 border-t border-[#fed255]/20">
@@ -183,28 +172,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Guarantees — each one is something the platform genuinely does.
-            Single column on a phone: two 150px cells could not hold an icon
-            plus a line like "GST invoice with every order" without the text
-            breaking into a ragged block. */}
-        <div className="py-6 border-b border-[#767680]/20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-left sm:text-center text-xs text-[#c6c5d0]">
-          <div className="flex items-center justify-start sm:justify-center gap-2">
-            <Truck className="w-4 h-4 shrink-0 text-[#fed255]" />
-            <span className="min-w-0">{deliveryNote}</span>
-          </div>
-          <div className="flex items-center justify-start sm:justify-center gap-2">
-            <FileText className="w-4 h-4 shrink-0 text-[#fed255]" />
-            <span className="min-w-0">GST invoice with every order</span>
-          </div>
-          <div className="flex items-center justify-start sm:justify-center gap-2">
-            <RefreshCw className="w-4 h-4 shrink-0 text-[#fed255]" />
-            <span className="min-w-0">Returns on eligible pieces</span>
-          </div>
-          <div className="flex items-center justify-start sm:justify-center gap-2">
-            <Lock className="w-4 h-4 shrink-0 text-[#fed255]" />
-            <span className="min-w-0">Secure Razorpay payments</span>
-          </div>
-        </div>
+
 
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-[#767680]">
           <p>© {new Date().getFullYear()} Dristhi Fashions. Fashion That Reflects Your Personality.</p>

@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { HeroCarousel } from '../components/home/HeroCarousel';
 import { CategoryChips } from '../components/home/CategoryChips';
 import { GenderTabs } from '../components/home/GenderTabs';
-import { TrustStrip } from '../components/home/TrustStrip';
+
 import { BrandStrips } from '../components/home/BrandStrips';
 import { OfferStrip } from '../components/home/OfferStrip';
 import { PromoCards } from '../components/home/PromoCards';
@@ -79,8 +79,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </div>
 
       <CategoryChips categories={visibleCategories} loading={categories.loading} onNavigate={onNavigate} />
-
-      <TrustStrip />
 
       <OfferStrip />
 
