@@ -156,7 +156,7 @@ export function mapCategory(api: ApiCategory): Category {
 export function mapBannerToSlide(api: ApiBanner): HeroSlide {
   return {
     id: api.id,
-    title: api.title || 'The Dristhi Edit',
+    title: api.title || 'The Dristi Edit',
     subtitle: api.subtitle || 'New Season',
     description: api.subtitle && api.title ? '' : 'Handpicked pieces from our latest collection.',
     image: api.imageUrl,
