@@ -270,7 +270,31 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
                 <span className="font-normal text-[#46464f]">{humanizeStatus(order.returnStatus)}</span>
               </p>
               {order.returnReason && <p className="text-xs text-[#767680]">Reason: {order.returnReason}</p>}
-              <p className="text-xs text-[#767680]">Our team will be in touch about the next steps.</p>
+              {order.returnStatus === 'approved' && (
+                <p className="text-xs text-[#1e6b32]">
+                  Approved — keep an eye on your phone/email for the pickup OTP and share it with our pickup partner.
+                </p>
+              )}
+              {order.returnStatus === 'rejected' && (
+                <p className="text-xs text-[#ba1a1a]">
+                  {order.returnAdminNote
+                    ? `Not approved: ${order.returnAdminNote}`
+                    : 'This request could not be approved. Our team will reach out with details.'}
+                </p>
+              )}
+              {order.returnStatus === 'picked_up' && (
+                <p className="text-xs text-[#1e6b32]">The item has been picked up. Your refund/replacement is on its way.</p>
+              )}
+              {order.returnEvidence.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {order.returnEvidence.map((url, i) => (
+                    <img key={`${url}-${i}`} src={url} alt={`Return evidence ${i + 1}`} className="w-16 h-16 rounded-lg object-cover border border-[#c6c5d0]/40" />
+                  ))}
+                </div>
+              )}
+              {(order.returnStatus === 'requested' || order.returnStatus === 'replace_requested') && (
+                <p className="text-xs text-[#767680]">Our team is reviewing your request and will be in touch.</p>
+              )}
             </div>
           ) : (
             <>

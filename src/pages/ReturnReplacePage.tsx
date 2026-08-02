@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Loader2, RefreshCw, RotateCcw } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { ArrowLeft, Camera, ImagePlus, Loader2, RefreshCw, RotateCcw, X } from 'lucide-react';
 import { ErrorState, Spinner } from '../components/common/States';
 import { useStore } from '../context/StoreContext';
 import { orderApi } from '../lib/api';
+import { errorMessage } from '../lib/apiClient';
 import { formatCurrency } from '../lib/format';
 import { mapOrder } from '../lib/mappers';
 import { useAsync } from '../lib/useAsync';
@@ -33,7 +34,28 @@ export const ReturnReplacePage: React.FC<ReturnReplacePageProps> = ({ orderId, o
   const [requestType, setRequestType] = useState<RequestType>('return');
   const [selectedReason, setSelectedReason] = useState(REASONS[0]);
   const [details, setDetails] = useState('');
+  const [evidence, setEvidence] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      const uploaded: string[] = [];
+      for (const file of Array.from(files)) {
+        const { url } = await orderApi.uploadReturnEvidence(file);
+        uploaded.push(url);
+      }
+      setEvidence(prev => [...prev, ...uploaded]);
+    } catch (err) {
+      showToast('Upload Failed', errorMessage(err, 'Could not upload that photo. Please try again.'), 'error');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +71,9 @@ export const ReturnReplacePage: React.FC<ReturnReplacePageProps> = ({ orderId, o
 
     setSubmitting(true);
     const ok =
-      requestType === 'return' ? await requestReturn(order.id, reason) : await requestReplace(order.id, reason);
+      requestType === 'return'
+        ? await requestReturn(order.id, reason, evidence)
+        : await requestReplace(order.id, reason, evidence);
     setSubmitting(false);
 
     if (ok) onNavigate(`/orders/${order.id}`);
@@ -206,6 +230,46 @@ export const ReturnReplacePage: React.FC<ReturnReplacePageProps> = ({ orderId, o
             placeholder="Anything that will help us resolve this quickly…"
             className="w-full bg-[#f4f2ff] border border-[#c6c5d0] rounded-lg p-3.5 text-sm text-[#181a2d] placeholder-[#767680] focus:outline-none focus:border-[#755b00]"
           />
+        </div>
+
+        {/* Evidence photos */}
+        <div>
+          <span className="block text-[11px] font-bold text-[#0d1648] uppercase tracking-wider font-sans mb-2">
+            Photos (optional)
+          </span>
+          <input ref={fileInputRef} type="file" accept="image/*" multiple hidden onChange={e => handleFiles(e.target.files)} />
+
+          {evidence.length > 0 && (
+            <div className="flex flex-wrap gap-3 mb-3">
+              {evidence.map((url, i) => (
+                <div key={`${url}-${i}`} className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#c6c5d0]/50 group">
+                  <img src={url} alt={`Evidence ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    aria-label="Remove photo"
+                    onClick={() => setEvidence(prev => prev.filter((_, j) => j !== i))}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="w-full flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#c6c5d0] py-3 text-xs text-[#46464f] font-sans hover:border-[#755b00] hover:text-[#755b00] transition-colors disabled:opacity-60"
+          >
+            {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
+            <span>{uploading ? 'Uploading…' : 'Add a photo of the item'}</span>
+          </button>
+          <p className="text-[11px] text-[#767680] font-sans mt-1.5">
+            <Camera className="inline w-3 h-3 mr-1" />
+            Clear photos of the issue help our team approve your request faster.
+          </p>
         </div>
 
         <button

@@ -267,3 +267,43 @@ export async function apiGetBlob(path: string): Promise<Blob> {
   }
   return res.blob();
 }
+
+/**
+ * Multipart upload for the evidence endpoint. Unlike the JSON helpers this one
+ * must NOT set a Content-Type header — the browser fills in the boundary.
+ */
+async function requestUpload<T>(path: string, file: File): Promise<T> {
+  const form = new FormData();
+  form.append('file', file);
+
+  const send = () => {
+    const h: Record<string, string> = {};
+    if (accessToken) h.Authorization = `Bearer ${accessToken}`;
+    return fetch(`${baseUrl}${path}`, { method: 'POST', headers: h, body: form });
+  };
+
+  let res: Response;
+  try {
+    res = await send();
+  } catch {
+    throw new ApiError(0, 'Cannot reach the store right now. Check your connection and try again.');
+  }
+
+  const isAuthFailure = res.status === 401 || res.status === 403;
+  if (isAuthFailure && accessToken && path !== REFRESH_PATH) {
+    const outcome = await refreshAccessToken();
+    if (outcome === 'refreshed') {
+      res = await send();
+    } else if (outcome === 'expired') {
+      clearTokens();
+      onSessionExpired?.();
+    }
+  }
+
+  return handleResponse<T>(res);
+}
+
+/** Uploads a customer return-evidence image. Returns the public S3 URL. */
+export function apiUploadReturnEvidence(file: File): Promise<{ url: string }> {
+  return requestUpload<{ url: string }>('/api/v1/upload/return-evidence', file);
+}

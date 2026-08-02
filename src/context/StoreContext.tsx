@@ -105,9 +105,9 @@ interface StoreContextType {
   getOrder: (orderId: string) => Promise<Order | null>;
   /** Places the order server-side and empties the bag. Payment happens after. */
   placeOrder: (address: Address) => Promise<Order | null>;
-  requestReturn: (orderId: string, reason: string) => Promise<boolean>;
-  requestReplace: (orderId: string, reason: string) => Promise<boolean>;
+  requestReturn: (orderId: string, reason: string, evidence?: string[]) => Promise<boolean>;
 
+  requestReplace: (orderId: string, reason: string, evidence?: string[]) => Promise<boolean>;
   // Wallet
   walletBalance: number;
   walletTransactions: WalletTransaction[];
@@ -790,9 +790,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 
   const requestReturn = useCallback(
-    async (orderId: string, reason: string): Promise<boolean> => {
+    async (orderId: string, reason: string, evidence: string[] = []): Promise<boolean> => {
       try {
-        await orderApi.requestReturn(orderId, reason);
+        await orderApi.requestReturn(orderId, reason, evidence);
         await refreshOrders();
         showToast('Return Requested', 'Our concierge team will be in touch shortly.', 'success');
         return true;
@@ -805,9 +805,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 
   const requestReplace = useCallback(
-    async (orderId: string, reason: string): Promise<boolean> => {
+    async (orderId: string, reason: string, evidence: string[] = []): Promise<boolean> => {
       try {
-        await orderApi.requestReplace(orderId, reason);
+        await orderApi.requestReplace(orderId, reason, evidence);
         await refreshOrders();
         showToast('Replacement Requested', 'Our concierge team will be in touch shortly.', 'success');
         return true;

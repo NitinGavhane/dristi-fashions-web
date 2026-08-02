@@ -5,7 +5,7 @@
  * model is `mappers.ts`'s job, so a backend field rename only ever has to be
  * chased through these two files.
  */
-import { apiDelete, apiGet, apiGetBlob, apiPost, apiPut, clearTokens, setTokens } from './apiClient';
+import { apiDelete, apiGet, apiGetBlob, apiPost, apiPut, apiUploadReturnEvidence, clearTokens, setTokens } from './apiClient';
 import type {
   ApiAddress,
   ApiAuthTokens,
@@ -289,12 +289,17 @@ export const orderApi = {
   },
 
   /** Delivered orders only; the reason is stored on the order. */
-  requestReturn(orderId: string, reason: string) {
-    return apiPost<{ message: string; returnStatus: string }>(`/api/v1/orders/${orderId}/return`, { reason });
+  requestReturn(orderId: string, reason: string, evidence: string[] = []) {
+    return apiPost<{ message: string; returnStatus: string }>(`/api/v1/orders/${orderId}/return`, { reason, evidence });
   },
 
-  requestReplace(orderId: string, reason: string) {
-    return apiPost<{ message: string; returnStatus: string }>(`/api/v1/orders/${orderId}/replace`, { reason });
+  requestReplace(orderId: string, reason: string, evidence: string[] = []) {
+    return apiPost<{ message: string; returnStatus: string }>(`/api/v1/orders/${orderId}/replace`, { reason, evidence });
+  },
+
+  /** Uploads one evidence photo; returns the S3 URL to attach to the request. */
+  uploadReturnEvidence(file: File) {
+    return apiUploadReturnEvidence(file);
   },
 
   invoicePdf(orderId: string) {

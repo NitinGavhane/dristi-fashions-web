@@ -172,6 +172,10 @@ export interface ApiOrder {
   shippingAddress?: string | null;
   returnReason?: string | null;
   returnStatus?: string | null;
+  returnEvidence?: string[] | null;
+  returnAdminNote?: string | null;
+  dispatchedAt?: string | null;
+  deliveredAt?: string | null;
   estimatedDelivery?: string | null;
   createdAt: string;
   items: ApiOrderItem[];
@@ -383,7 +387,7 @@ export type AddressInput = Omit<Address, 'id'>;
 /** Backend statuses, kept verbatim so nothing is lost in translation. */
 export type OrderStatus = 'placed' | 'processing' | 'dispatched' | 'out_for_delivery' | 'delivered' | 'cancelled';
 
-export type ReturnStatus = 'requested' | 'replace_requested' | 'approved' | 'rejected' | 'completed';
+export type ReturnStatus = 'requested' | 'replace_requested' | 'approved' | 'rejected' | 'picked_up' | 'completed';
 
 export interface OrderItem {
   id: string;
@@ -411,6 +415,10 @@ export interface Order {
   shippingAddress: string;
   returnReason: string | null;
   returnStatus: ReturnStatus | null;
+  returnEvidence: string[];
+  returnAdminNote: string | null;
+  dispatchedAt: string | null;
+  deliveredAt: string | null;
   estimatedDelivery: string | null;
   createdAt: string;
 }

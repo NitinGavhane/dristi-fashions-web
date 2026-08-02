@@ -261,6 +261,10 @@ export function mapOrder(api: ApiOrder): Order {
     shippingAddress: api.shippingAddress ?? '',
     returnReason: api.returnReason || null,
     returnStatus,
+    returnEvidence: api.returnEvidence ?? [],
+    returnAdminNote: api.returnAdminNote ?? null,
+    dispatchedAt: api.dispatchedAt ?? null,
+    deliveredAt: api.deliveredAt ?? null,
     estimatedDelivery: api.estimatedDelivery ?? null,
     createdAt: api.createdAt,
   };
