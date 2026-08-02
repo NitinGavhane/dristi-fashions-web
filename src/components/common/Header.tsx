@@ -5,7 +5,7 @@ import { catalogApi } from '../../lib/api';
 import { formatCurrency, initials } from '../../lib/format';
 import { mapCategory } from '../../lib/mappers';
 import { useAsync } from '../../lib/useAsync';
-import { DristhiLogo } from './DristhiLogo';
+import { DristiLogo } from './DristiLogo';
 
 interface HeaderProps {
   currentPath: string;
@@ -164,17 +164,17 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
             <button
               onClick={() => onNavigate('/')}
               className="inline-flex min-w-0 max-w-full items-center focus:outline-none"
-              aria-label="Dristhi Fashions home"
+              aria-label="Dristi Fashions home"
             >
               {/* The show/hide lives on these wrappers rather than on the logo
                   itself — the component already sets its own `display`, and two
                   competing display utilities on one element resolve by
                   stylesheet order rather than by intent. */}
               <span className="block sm:hidden">
-                <DristhiLogo size="sm" variant="emblem-only" />
+                <DristiLogo size="sm" variant="emblem-only" />
               </span>
               <span className="hidden sm:block">
-                <DristhiLogo size="md" variant="horizontal" compactOnMobile />
+                <DristiLogo size="md" variant="horizontal" compactOnMobile />
               </span>
             </button>
           </div>
@@ -274,7 +274,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
                         onClick={() => onNavigate('/profile/wallet')}
                         className="w-full text-left px-4 py-2 text-xs text-[#e0e0fb] hover:bg-[#fed255]/10 flex items-center justify-between"
                       >
-                        <span>Dristhi Wallet</span>
+                        <span>Dristi Wallet</span>
                         <span className="text-[10px] font-bold text-[#fed255]">{formatCurrency(walletBalance)}</span>
                       </button>
 
@@ -334,7 +334,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
         <form onSubmit={handleSearchSubmit} className="relative w-full">
           <input
             type="search"
-            placeholder="Search Dristhi Fashions…"
+            placeholder="Search Dristi Fashions…"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             aria-label="Search products"
@@ -352,7 +352,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
           <div className="w-[85%] max-w-[20rem] bg-[#0d1648] text-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto overscroll-contain border-r border-[#fed255]/30">
             <div>
               <div className="p-4 sm:p-6 bg-[#080d2d] border-b border-[#fed255]/30 flex items-center justify-between gap-3">
-                <DristhiLogo size="sm" variant="horizontal" compactOnMobile className="min-w-0" />
+                <DristiLogo size="sm" variant="horizontal" compactOnMobile className="min-w-0" />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1 shrink-0 text-[#ffe08e] hover:text-white"
@@ -374,7 +374,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
                 </div>
               ) : (
                 <div className="p-4 bg-[#181a2d] border-b border-[#fed255]/20 flex items-center justify-between gap-3">
-                  <p className="text-xs font-medium text-white">Welcome to Dristhi Fashions</p>
+                  <p className="text-xs font-medium text-white">Welcome to Dristi Fashions</p>
                   <button onClick={() => onNavigate('/login')} className="btn-primary text-[10px] px-3 py-1.5 shrink-0">
                     Sign In
                   </button>
@@ -408,7 +408,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
                   { label: 'All Collections', path: '/categories' },
                   { label: 'My Orders', path: '/orders' },
                   { label: `My Wishlist (${wishlist.length})`, path: '/wishlist' },
-                  { label: `Dristhi Wallet (${formatCurrency(walletBalance)})`, path: '/profile/wallet' },
+                  { label: `Dristi Wallet (${formatCurrency(walletBalance)})`, path: '/profile/wallet' },
                   { label: 'The Journal', path: '/blog' },
                   { label: 'Contact Us', path: '/contact' },
                 ].map(item => (

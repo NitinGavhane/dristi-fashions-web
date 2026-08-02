@@ -90,7 +90,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigate }) => {
         </span>
         <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#0d1648]">Stories from the Atelier</h1>
         <p className="text-xs text-[#767680] font-sans leading-relaxed">
-          Styling notes, collection stories and news from Dristhi Fashions.
+          Styling notes, collection stories and news from Dristi Fashions.
         </p>
       </div>
 

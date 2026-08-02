@@ -1,4 +1,4 @@
-# Dristhi Fashions — Storefront
+# Dristi Fashions — Storefront
 
 React + Vite storefront for the Garment E-commerce Platform. Every screen reads
 from the FastAPI backend in [`../backend`](../backend); there is no mock data in
@@ -84,12 +84,12 @@ elsewhere, applied on top of the item subtotal. Delivery charges come from
 
 | File | Used for |
 | --- | --- |
-| `assets/logo.png` | the master artwork — imported by `DristhiLogo` and used as the `og:image` |
+| `assets/logo.png` | the master artwork — imported by `DristiLogo` and used as the `og:image` |
 | `assets/logo-icon.png` | 256px favicon (emblem only) |
 | `assets/apple-touch-icon.png` | 180px iOS home-screen icon, flattened onto brand navy |
 
 `logo.png` is a stacked lockup: emblem on top, wordmark beneath, centred in a
-square canvas with transparent padding. `DristhiLogo` carries two crop
+square canvas with transparent padding. `DristiLogo` carries two crop
 rectangles measured from its alpha channel — one for the emblem alone
 (headers, where the wordmark would be an illegible smudge at 44px) and one for
 the trimmed full lockup (the About page). **Replacing the artwork means

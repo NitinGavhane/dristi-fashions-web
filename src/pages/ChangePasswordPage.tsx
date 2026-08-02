@@ -48,7 +48,7 @@ export const ChangePasswordPage: React.FC<ChangePasswordPageProps> = ({ onNaviga
       <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#c6c5d0]/30 space-y-6">
         <div className="border-b border-[#c6c5d0]/30 pb-4">
           <h1 className="font-serif text-2xl font-bold text-[#0d1648]">Security Credentials</h1>
-          <p className="text-xs text-[#767680] font-sans mt-1">Choose a new password for your Dristhi Fashions account.</p>
+          <p className="text-xs text-[#767680] font-sans mt-1">Choose a new password for your Dristi Fashions account.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">

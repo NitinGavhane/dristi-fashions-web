@@ -22,7 +22,7 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
       <div className="min-h-[60vh] max-w-md mx-auto px-4 py-16">
         <EmptyState
           icon={<Wallet className="w-12 h-12" />}
-          title="Dristhi Wallet"
+          title="Dristi Wallet"
           message="Sign in to view your store credit and referral earnings."
           actionLabel="Sign In"
           onAction={() => onNavigate('/login?next=/profile/wallet')}
@@ -41,7 +41,7 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
       </button>
 
       <div className="border-b border-[#c6c5d0]/30 pb-4">
-        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#0d1648]">Dristhi Wallet</h1>
+        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#0d1648]">Dristi Wallet</h1>
         <p className="text-xs text-[#767680] font-sans mt-1">
           Your store credit balance and every transaction behind it.
         </p>

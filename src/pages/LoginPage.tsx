@@ -79,7 +79,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ currentPath, onNavigate })
       onNavigate={onNavigate}
       footer={
         <p className="text-[#e0e0fb]">
-          New to Dristhi Fashions?{' '}
+          New to Dristi Fashions?{' '}
           <button onClick={() => onNavigate('/register')} className="text-[#fed255] font-bold hover:underline">
             Create an Account
           </button>

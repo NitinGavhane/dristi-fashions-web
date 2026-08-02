@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Award, Sparkles, HeartHandshake } from 'lucide-react';
-import { DristhiLogo } from '../components/common/DristhiLogo';
+import { DristiLogo } from '../components/common/DristiLogo';
 import { catalogApi } from '../lib/api';
 import { useAsync } from '../lib/useAsync';
 
@@ -24,7 +24,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       {/* Hero Header */}
       <div className="text-center space-y-3">
         <div className="flex justify-center mb-2">
-          <DristhiLogo size="lg" variant="stacked" />
+          <DristiLogo size="lg" variant="stacked" />
         </div>
         <p className="text-xs text-[#767680] font-sans max-w-2xl mx-auto leading-relaxed">
           Fashion That Reflects Your Personality — Combining traditional heritage craftsmanship with contemporary silhouettes.
@@ -76,10 +76,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#c6c5d0]/30 space-y-4 text-xs font-sans leading-relaxed text-[#46464f]">
         <h3 className="font-serif text-2xl font-bold text-[#0d1648]">Our Story</h3>
         <p>
-          Dristhi Fashions was founded on the philosophy that fashion should empower and reflect the true essence of your individual personality. From rich handwoven textiles to contemporary fusion cuts, our collections are created to make every moment memorable.
+          Dristi Fashions was founded on the philosophy that fashion should empower and reflect the true essence of your individual personality. From rich handwoven textiles to contemporary fusion cuts, our collections are created to make every moment memorable.
         </p>
         <p>
-          Whether you are celebrating grand festivities, weddings, or everyday elegance, Dristhi Fashions offers curations designed with passion, precision, and flair.
+          Whether you are celebrating grand festivities, weddings, or everyday elegance, Dristi Fashions offers curations designed with passion, precision, and flair.
         </p>
       </div>
 

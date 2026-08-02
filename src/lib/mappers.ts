@@ -44,7 +44,7 @@ export const PLACEHOLDER_IMAGE =
       <circle cx="300" cy="340" r="86" fill="none" stroke="#c6c5d0" stroke-width="3"/>
       <path d="M255 372l30-34 26 30 22-24 42 48H255z" fill="#c6c5d0"/>
       <text x="300" y="500" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#9a99ab">
-        Dristhi Fashions
+        Dristi Fashions
       </text>
     </svg>`,
   );
@@ -111,7 +111,7 @@ export function mapProduct(api: ApiProductListItem | ApiProduct): Product {
     id: api.id,
     title: api.title,
     sku: api.sku ?? '',
-    brand: api.brand || 'Dristhi Fashions',
+    brand: api.brand || 'Dristi Fashions',
     description: api.description ?? '',
     price: api.price,
     mrp: api.originalPrice ?? api.price,
@@ -298,7 +298,7 @@ export function mapBlogPost(api: ApiBlogPost): BlogPost {
     excerpt: api.excerpt || (api.content ? `${api.content.slice(0, 160)}…` : ''),
     content: api.content ?? '',
     image: api.imageUrl || null,
-    author: api.author || 'Dristhi Atelier',
+    author: api.author || 'Dristi Atelier',
     createdAt: api.createdAt,
   };
 }

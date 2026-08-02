@@ -3,7 +3,7 @@ import { Loader2, Mail } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { contactApi } from '../../lib/api';
 import { errorMessage } from '../../lib/apiClient';
-import { DristhiLogo } from './DristhiLogo';
+import { DristiLogo } from './DristiLogo';
 
 interface FooterProps {
   onNavigate: (path: string) => void;
@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <p className="text-[10px] font-sans font-bold tracking-[0.3em] text-[#fed255] uppercase mb-2">
             STAY IN THE LOOP
           </p>
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white mb-3">Subscribe to Dristhi Fashions</h3>
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white mb-3">Subscribe to Dristi Fashions</h3>
           <p className="text-xs text-[#c6c5d0] max-w-xl mx-auto mb-6 leading-relaxed font-sans">
             Be the first to hear about new arrivals and collection launches. Unsubscribe any time.
           </p>
@@ -79,10 +79,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <button onClick={() => onNavigate('/')} className="flex min-w-0 max-w-full flex-col items-start text-left">
               {/* `md` rather than `lg`: at `lg` the wordmark is ~280px wide,
                   which is the entire content width of a 320px screen. */}
-              <DristhiLogo size="md" variant="horizontal" />
+              <DristiLogo size="md" variant="horizontal" />
             </button>
             <p className="text-[#c6c5d0] text-xs leading-relaxed max-w-sm">
-              Dristhi Fashions brings timeless elegance, ethnic heritage, and modern silhouettes tailored to reflect
+              Dristi Fashions brings timeless elegance, ethnic heritage, and modern silhouettes tailored to reflect
               your unique personality.
             </p>
           </div>
@@ -160,7 +160,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li>
                 <button onClick={() => onNavigate('/profile/wallet')} className="hover:text-white transition-colors">
-                  Dristhi Wallet
+                  Dristi Wallet
                 </button>
               </li>
               <li>
@@ -175,7 +175,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
 
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-[#767680]">
-          <p>© {new Date().getFullYear()} Dristhi Fashions. Fashion That Reflects Your Personality.</p>
+          <p>© {new Date().getFullYear()} Dristi Fashions. Fashion That Reflects Your Personality.</p>
           <div className="flex items-center gap-4">
             <button onClick={() => onNavigate('/profile/about')} className="hover:text-white">
               About Us

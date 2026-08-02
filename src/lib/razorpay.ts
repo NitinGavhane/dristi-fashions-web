@@ -88,7 +88,7 @@ export function openRazorpayCheckout(
       order_id: intent.razorpayOrderId,
       amount: intent.amountPaise ?? Math.round(intent.amount * 100),
       currency: intent.currency ?? 'INR',
-      name: 'Dristhi Fashions',
+      name: 'Dristi Fashions',
       description: `Order ${orderNumber}`,
       prefill: {
         name: customer.name,

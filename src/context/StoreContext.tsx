@@ -456,7 +456,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // customer is already signed in and should not be asked to log in again.
         if (result.accessToken) {
           const profile = await completeSignIn();
-          showToast('Account Verified', `Welcome to Dristhi Fashions, ${profile.fullName}.`, 'success');
+          showToast('Account Verified', `Welcome to Dristi Fashions, ${profile.fullName}.`, 'success');
         } else {
           showToast('Account Verified', 'Your email has been verified. Please sign in.', 'success');
         }
@@ -543,7 +543,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     authApi.logout();
     isAuthenticatedRef.current = false;
     clearSessionState();
-    showToast('Signed Out', 'You have been signed out of Dristhi Fashions.', 'info');
+    showToast('Signed Out', 'You have been signed out of Dristi Fashions.', 'info');
   }, [clearSessionState, showToast]);
 
   /* -------------------------------------------------------------- */

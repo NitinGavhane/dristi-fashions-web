@@ -76,7 +76,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ currentPath, onNavig
   return (
     <AuthLayout
       eyebrow="CREATE ACCOUNT"
-      title="Join Dristhi Fashions"
+      title="Join Dristi Fashions"
       subtitle="Create an account to track orders, save a wishlist and earn referral rewards."
       altAction={{ label: 'Sign In', path: '/login' }}
       onNavigate={onNavigate}
@@ -175,7 +175,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ currentPath, onNavig
             onChange={e => setAgreeTerms(e.target.checked)}
             className="accent-[#fed255] mt-0.5"
           />
-          <span>I agree to the Dristhi Fashions Terms of Service and Privacy Policy</span>
+          <span>I agree to the Dristi Fashions Terms of Service and Privacy Policy</span>
         </label>
 
         {error && <p className="text-[11px] text-[#ff9d9d]">{error}</p>}

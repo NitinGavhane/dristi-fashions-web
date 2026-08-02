@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { DristhiLogo } from './DristhiLogo';
+import { DristiLogo } from './DristiLogo';
 
 interface AuthLayoutProps {
   eyebrow: string;
@@ -31,9 +31,9 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
       <button
         onClick={() => onNavigate('/')}
         className="min-w-0 focus:outline-none"
-        aria-label="Dristhi Fashions home"
+        aria-label="Dristi Fashions home"
       >
-        <DristhiLogo size="sm" variant="horizontal" compactOnMobile />
+        <DristiLogo size="sm" variant="horizontal" compactOnMobile />
       </button>
       <button
         onClick={() => onNavigate(altAction?.path ?? '/')}

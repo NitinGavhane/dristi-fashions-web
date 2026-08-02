@@ -22,7 +22,7 @@ const BRAND_TAGLINE = 'Fashion That Reflects Your Personality';
 type LogoSize = 'sm' | 'md' | 'lg' | 'xl';
 type LogoVariant = 'full' | 'horizontal' | 'emblem-only' | 'text-only' | 'stacked';
 
-interface DristhiLogoProps {
+interface DristiLogoProps {
   className?: string;
   size?: LogoSize;
   variant?: LogoVariant;
@@ -107,7 +107,7 @@ const CroppedLogo: React.FC<{ crop: CropBox; heightClass: string; alt: string }>
   </div>
 );
 
-export const DristhiLogo: React.FC<DristhiLogoProps> = ({
+export const DristiLogo: React.FC<DristiLogoProps> = ({
   className = '',
   size = 'md',
   variant = 'full',

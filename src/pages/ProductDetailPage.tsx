@@ -151,7 +151,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
       }
     }
 
-    const shareData = { title: product.title, text: `${product.title} at Dristhi Fashions`, url };
+    const shareData = { title: product.title, text: `${product.title} at Dristi Fashions`, url };
     if (navigator.share) {
       try {
         await navigator.share(shareData);

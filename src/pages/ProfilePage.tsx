@@ -34,7 +34,7 @@ const MENU = [
     path: '/profile/addresses',
   },
   {
-    title: 'Dristhi Wallet',
+    title: 'Dristi Wallet',
     desc: 'View your store credit and transactions',
     icon: Wallet,
     path: '/profile/wallet',
@@ -58,7 +58,7 @@ const MENU = [
     path: '/profile/change-password',
   },
   {
-    title: 'About Dristhi',
+    title: 'About Dristi',
     desc: 'Our story and what we stand for',
     icon: Info,
     path: '/profile/about',

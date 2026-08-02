@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
 test('home page loads renders hero and products', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/.+/);
-  await expect(page.getByRole('button', { name: 'Dristhi Fashions home' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Dristi Fashions home' })).toBeVisible();
   // Product grid should render (home shows products).
   await expect(page.locator('main').first()).toBeVisible();
 });

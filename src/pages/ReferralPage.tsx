@@ -42,8 +42,8 @@ export const ReferralPage: React.FC<ReferralPageProps> = ({ onNavigate }) => {
   const handleShare = async () => {
     if (!inviteLink || !stats.data) return;
     const shareData = {
-      title: 'Dristhi Fashions',
-      text: `Shop Dristhi Fashions with my code ${stats.data.referralCode}.`,
+      title: 'Dristi Fashions',
+      text: `Shop Dristi Fashions with my code ${stats.data.referralCode}.`,
       url: inviteLink,
     };
     if (navigator.share) {
