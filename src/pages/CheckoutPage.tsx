@@ -101,6 +101,16 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       setStage('paying');
       const intent = await paymentApi.create(order.id, selectedMethod ?? undefined);
 
+      // Cash on Delivery is confirmed immediately — there is no gateway order
+      // to open and no payment to verify.
+      if (intent.cod) {
+        setStage('idle');
+        await refreshOrders();
+        showToast('Order Confirmed', `Order ${order.orderNumber} is confirmed. Cash will be collected on delivery.`, 'success');
+        onNavigate(`/orders/${order.id}`);
+        return;
+      }
+
       const ready = await loadRazorpay();
       if (!ready) throw new Error('The payment gateway could not be loaded.');
 

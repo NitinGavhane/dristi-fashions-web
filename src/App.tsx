@@ -28,6 +28,10 @@ import { ContactPage } from './pages/ContactPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { BlogPage } from './pages/BlogPage';
 import { CategoriesPage } from './pages/CategoriesPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsConditionsPage } from './pages/TermsConditionsPage';
+import { LoyaltyProgramPage } from './pages/LoyaltyProgramPage';
+import { FaqPage } from './pages/FaqPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 /** Screens rendered without the storefront chrome. */
@@ -98,6 +102,14 @@ export default function App() {
         return <BlogPage onNavigate={navigate} />;
       case '/categories':
         return <CategoriesPage onNavigate={navigate} />;
+      case '/privacy-policy':
+        return <PrivacyPolicyPage onNavigate={navigate} />;
+      case '/terms':
+        return <TermsConditionsPage onNavigate={navigate} />;
+      case '/loyalty-program':
+        return <LoyaltyProgramPage onNavigate={navigate} />;
+      case '/faq':
+        return <FaqPage onNavigate={navigate} />;
       default:
         break;
     }

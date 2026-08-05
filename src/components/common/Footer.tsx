@@ -74,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Two columns from `sm` — a single stacked column made the link list
             unusably long on a phone, and the four groups fit two-up easily. */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-8 sm:gap-10 pb-12 border-b border-[#767680]/30 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-x-6 gap-y-8 sm:gap-10 pb-12 border-b border-[#767680]/30 text-xs">
           <div className="col-span-2 lg:col-span-2 space-y-4">
             <button onClick={() => onNavigate('/')} className="flex min-w-0 max-w-full flex-col items-start text-left">
               {/* `md` rather than `lg`: at `lg` the wordmark is ~280px wide,
@@ -125,6 +125,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </button>
               </li>
               <li>
+                <button onClick={() => onNavigate('/faq')} className="hover:text-white transition-colors">
+                  FAQ
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onNavigate('/orders')} className="hover:text-white transition-colors">
                   Track Your Order
                 </button>
@@ -140,6 +145,27 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   className="hover:text-white transition-colors"
                 >
                   Delivery Addresses
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <p className="font-serif text-sm font-semibold text-[#fed255]">Policies</p>
+            <ul className="space-y-2 text-[#c6c5d0]">
+              <li>
+                <button onClick={() => onNavigate('/loyalty-program')} className="hover:text-white transition-colors">
+                  Rewards & Loyalty
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onNavigate('/privacy-policy')} className="hover:text-white transition-colors">
+                  Privacy Policy
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onNavigate('/terms')} className="hover:text-white transition-colors">
+                  Terms & Conditions
                 </button>
               </li>
             </ul>

@@ -208,6 +208,8 @@ export interface ApiPaymentIntent {
   razorpayKeyId?: string | null;
   currency?: string | null;
   amountPaise?: number | null;
+  /** True for Cash on Delivery — no gateway order is opened, nothing to verify. */
+  cod?: boolean | null;
 }
 
 export interface ApiReview {
