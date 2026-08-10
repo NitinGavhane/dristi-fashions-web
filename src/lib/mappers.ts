@@ -266,6 +266,10 @@ export function mapOrder(api: ApiOrder): Order {
     dispatchedAt: api.dispatchedAt ?? null,
     deliveredAt: api.deliveredAt ?? null,
     estimatedDelivery: api.estimatedDelivery ?? null,
+    awbCode: api.awbCode ?? null,
+    courierName: api.courierName ?? null,
+    shipmentStatus: api.shipmentStatus ?? null,
+    trackingUrl: api.trackingUrl ?? null,
     createdAt: api.createdAt,
   };
 }

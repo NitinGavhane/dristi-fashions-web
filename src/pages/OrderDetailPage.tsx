@@ -8,6 +8,7 @@ import {
   Loader2,
   MapPin,
   RotateCcw,
+  Truck,
 } from 'lucide-react';
 import { ErrorState, Spinner } from '../components/common/States';
 import { ORDER_FLOW, OrderStatusBadge, PaymentStatusBadge } from '../components/common/OrderStatus';
@@ -255,6 +256,44 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
           {order.shippingAddress || 'No address recorded for this order.'}
         </p>
       </section>
+
+      {/* Courier tracking */}
+      {order.trackingUrl && (
+        <section className="bg-white rounded-xl border border-[#c6c5d0]/30 shadow-sm p-4 sm:p-6">
+          <h2 className="font-serif text-lg font-bold text-[#0d1648] inline-flex items-center gap-2 mb-3">
+            <Truck className="w-4 h-4 text-[#755b00]" /> Shipment Tracking
+          </h2>
+          <div className="text-sm font-sans space-y-1">
+            {order.courierName && (
+              <div className="flex justify-between gap-4">
+                <span className="text-[#767680]">Courier</span>
+                <span className="font-semibold text-[#0d1648]">{order.courierName}</span>
+              </div>
+            )}
+            {order.awbCode && (
+              <div className="flex justify-between gap-4">
+                <span className="text-[#767680]">AWB Number</span>
+                <span className="font-semibold text-[#0d1648]">{order.awbCode}</span>
+              </div>
+            )}
+            {order.shipmentStatus && (
+              <div className="flex justify-between gap-4">
+                <span className="text-[#767680]">Status</span>
+                <span className="font-semibold text-[#2e7d32]">{order.shipmentStatus}</span>
+              </div>
+            )}
+          </div>
+          <a
+            href={order.trackingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary w-full mt-5 py-2.5 text-[11px] inline-flex items-center justify-center gap-2"
+          >
+            <Truck className="w-3.5 h-3.5" />
+            <span>Track on ShipRocket</span>
+          </a>
+        </section>
+      )}
 
       {/* Returns */}
       {(canRequestReturn || order.returnStatus) && (

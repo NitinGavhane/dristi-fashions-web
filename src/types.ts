@@ -177,6 +177,11 @@ export interface ApiOrder {
   dispatchedAt?: string | null;
   deliveredAt?: string | null;
   estimatedDelivery?: string | null;
+  // ShipRocket courier tracking (populated once the order is dispatched).
+  awbCode?: string | null;
+  courierName?: string | null;
+  shipmentStatus?: string | null;
+  trackingUrl?: string | null;
   createdAt: string;
   items: ApiOrderItem[];
 }
@@ -422,6 +427,11 @@ export interface Order {
   dispatchedAt: string | null;
   deliveredAt: string | null;
   estimatedDelivery: string | null;
+  // ShipRocket courier tracking (only present once the order is dispatched).
+  awbCode: string | null;
+  courierName: string | null;
+  shipmentStatus: string | null;
+  trackingUrl: string | null;
   createdAt: string;
 }
 
