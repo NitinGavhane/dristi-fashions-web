@@ -435,6 +435,17 @@ export interface Order {
   createdAt: string;
 }
 
+/** Live ShipRocket tracking for a shipped order (from GET /orders/{id}/tracking). */
+export interface OrderTracking {
+  order_id: string;
+  awb_code: string | null;
+  courier_name: string | null;
+  shipment_status: string | null;
+  tracking_url: string | null;
+  shiprocket?: Record<string, unknown>;
+  shiprocket_error?: string;
+}
+
 export interface WalletTransaction {
   id: string;
   type: 'credit' | 'debit';

@@ -305,6 +305,11 @@ export const orderApi = {
   invoicePdf(orderId: string) {
     return apiGetBlob(`/api/v1/orders/${orderId}/invoice`);
   },
+
+  /** Live ShipRocket courier status for a shipped order (fresh AWB status). */
+  tracking(orderId: string) {
+    return apiGet<OrderTracking>(`/api/v1/orders/${orderId}/tracking`);
+  },
 };
 
 /* ------------------------------------------------------------------ */

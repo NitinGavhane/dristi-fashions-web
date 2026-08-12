@@ -19,6 +19,7 @@ import { formatCurrency, formatDate, humanizeStatus } from '../lib/format';
 import { mapOrder } from '../lib/mappers';
 import { CGST_PERCENTAGE, IGST_PERCENTAGE, SGST_PERCENTAGE } from '../lib/pricing';
 import { useAsync } from '../lib/useAsync';
+import { OrderTracking } from '../types';
 
 interface OrderDetailPageProps {
   orderId: string;
@@ -31,6 +32,15 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
 
   const state = useAsync(() => orderApi.get(orderId), [orderId]);
   const order = state.data ? mapOrder(state.data) : null;
+
+  // Live ShipRocket tracking. Fetch whenever the order id changes; only orders
+  // with an assigned AWB return util data, so a lightweight call here is fine
+  // even before dispatch (backend returns stored snapshot or null AWB).
+  const trackingState = useAsync(
+    () => orderApi.tracking(orderId),
+    [orderId],
+  );
+  const liveTracking = trackingState.data as OrderTracking | null;
 
   // Redirecting is a side effect, so it waits for commit rather than running
   // mid-render.
@@ -258,40 +268,60 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
       </section>
 
       {/* Courier tracking */}
-      {order.trackingUrl && (
+      {((order.trackingUrl) || (liveTracking?.tracking_url)) && (
         <section className="bg-white rounded-xl border border-[#c6c5d0]/30 shadow-sm p-4 sm:p-6">
           <h2 className="font-serif text-lg font-bold text-[#0d1648] inline-flex items-center gap-2 mb-3">
             <Truck className="w-4 h-4 text-[#755b00]" /> Shipment Tracking
           </h2>
           <div className="text-sm font-sans space-y-1">
-            {order.courierName && (
-              <div className="flex justify-between gap-4">
-                <span className="text-[#767680]">Courier</span>
-                <span className="font-semibold text-[#0d1648]">{order.courierName}</span>
-              </div>
-            )}
-            {order.awbCode && (
-              <div className="flex justify-between gap-4">
-                <span className="text-[#767680]">AWB Number</span>
-                <span className="font-semibold text-[#0d1648]">{order.awbCode}</span>
-              </div>
-            )}
-            {order.shipmentStatus && (
-              <div className="flex justify-between gap-4">
-                <span className="text-[#767680]">Status</span>
-                <span className="font-semibold text-[#2e7d32]">{order.shipmentStatus}</span>
-              </div>
-            )}
+            {(() => {
+              const courier = liveTracking?.courier_name ?? order.courierName;
+              const awb = liveTracking?.awb_code ?? order.awbCode;
+              const status = liveTracking?.shipment_status ?? order.shipmentStatus;
+              const trackUrl = liveTracking?.tracking_url ?? order.trackingUrl;
+              return (
+                <>
+                  {courier && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-[#767680]">Courier</span>
+                      <span className="font-semibold text-[#0d1648]">{courier}</span>
+                    </div>
+                  )}
+                  {awb && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-[#767680]">AWB Number</span>
+                      <span className="font-semibold text-[#0d1648]">{awb}</span>
+                    </div>
+                  )}
+                  {status && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-[#767680]">Status</span>
+                      <span className="font-semibold text-[#2e7d32]">{status}</span>
+                    </div>
+                  )}
+                  {trackingState.loading && (
+                    <div className="flex items-center gap-2 text-xs text-[#767680]">
+                      <Loader2 className="w-3 h-3 animate-spin" /> Refreshing live status…
+                    </div>
+                  )}
+                  {trackingState.error && (
+                    <div className="text-xs text-[#ba1a1a]">Tracking refresh failed — showing saved status.</div>
+                  )}
+                  {trackUrl && (
+                    <a
+                      href={trackUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary w-full mt-5 py-2.5 text-[11px] inline-flex items-center justify-center gap-2"
+                    >
+                      <Truck className="w-3.5 h-3.5" />
+                      <span>Track on ShipRocket</span>
+                    </a>
+                  )}
+                </>
+              );
+            })()}
           </div>
-          <a
-            href={order.trackingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary w-full mt-5 py-2.5 text-[11px] inline-flex items-center justify-center gap-2"
-          >
-            <Truck className="w-3.5 h-3.5" />
-            <span>Track on ShipRocket</span>
-          </a>
         </section>
       )}
 
