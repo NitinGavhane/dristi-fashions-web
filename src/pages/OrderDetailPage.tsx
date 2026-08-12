@@ -19,7 +19,7 @@ import { formatCurrency, formatDate, humanizeStatus } from '../lib/format';
 import { mapOrder } from '../lib/mappers';
 import { CGST_PERCENTAGE, IGST_PERCENTAGE, SGST_PERCENTAGE } from '../lib/pricing';
 import { useAsync } from '../lib/useAsync';
-import { OrderTracking } from '../types';
+import type { OrderTracking } from '../types';
 
 interface OrderDetailPageProps {
   orderId: string;

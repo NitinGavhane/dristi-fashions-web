@@ -16,6 +16,7 @@ import type {
   ApiHomeContent,
   ApiOrder,
   ApiPaymentIntent,
+  OrderTracking,
   ApiPaymentMethod,
   ApiProduct,
   ApiProductListItem,
