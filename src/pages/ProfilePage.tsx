@@ -12,6 +12,7 @@ import {
   Settings,
   Wallet,
 } from 'lucide-react';
+import { BackButton } from '../components/common/BackButton';
 import { EmptyState, Spinner } from '../components/common/States';
 import { useStore } from '../context/StoreContext';
 import { formatCurrency, initials } from '../lib/format';
@@ -74,11 +75,19 @@ const MENU = [
 export const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigate }) => {
   const { user, authLoading, walletBalance, orders, wishlist, logout, showToast } = useStore();
 
-  if (authLoading) return <Spinner label="Loading your account…" className="min-h-[50vh]" />;
+  if (authLoading) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-8">
+        <BackButton onNavigate={onNavigate} to="/" className="mb-6" />
+        <Spinner label="Loading your account…" className="min-h-[50vh]" />
+      </div>
+    );
+  }
 
   if (!user) {
     return (
       <div className="min-h-[60vh] max-w-md mx-auto px-4 py-16">
+        <BackButton onNavigate={onNavigate} to="/" className="mb-6" />
         <EmptyState
           title="My Account"
           message="Sign in to manage your orders, addresses and wallet."
@@ -101,6 +110,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <BackButton onNavigate={onNavigate} to="/" />
       {/* Header */}
       <div className="bg-[#0d1648] text-white rounded-2xl p-5 sm:p-8 shadow-2xl relative overflow-hidden border border-[#fed255]/30 flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-6">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#fed255]/10 rounded-full blur-3xl pointer-events-none" />

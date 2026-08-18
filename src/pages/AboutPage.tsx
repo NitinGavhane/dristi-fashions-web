@@ -18,7 +18,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         onClick={() => onNavigate('/profile')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Account
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       {/* Hero Header */}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Lock, Minus, Plus, ShieldCheck, ShoppingBag, Trash2 } from 'lucide-react';
+import { BackButton } from '../components/common/BackButton';
 import { EmptyState, Spinner } from '../components/common/States';
 import { useStore } from '../context/StoreContext';
 import { formatCurrency } from '../lib/format';
@@ -41,6 +42,7 @@ export const CartPage: React.FC<CartPageProps> = ({ onNavigate }) => {
   if (cart.length === 0) {
     return (
       <div className="min-h-[60vh] max-w-2xl mx-auto px-4 py-16">
+        <BackButton onNavigate={onNavigate} to="/search" className="mb-6" />
         <EmptyState
           icon={<ShoppingBag className="w-12 h-12" />}
           title="Your bag is empty"
@@ -54,6 +56,7 @@ export const CartPage: React.FC<CartPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <BackButton onNavigate={onNavigate} to="/search" className="mb-4" />
       <div className="mb-8">
         <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#0d1648]">Shopping Bag</h1>
         <p className="text-xs text-[#767680] font-sans mt-1">

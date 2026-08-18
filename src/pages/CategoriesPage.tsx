@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { ArrowRight, LayoutGrid } from 'lucide-react';
+import { BackButton } from '../components/common/BackButton';
 import { EmptyState, ErrorState } from '../components/common/States';
 import { GenderTabs } from '../components/home/GenderTabs';
 import { useStore } from '../context/StoreContext';
@@ -30,6 +31,7 @@ export const CategoriesPage: React.FC<CategoriesPageProps> = ({ onNavigate }) =>
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <BackButton onNavigate={onNavigate} to="/" />
       <div className="text-center space-y-2 max-w-2xl mx-auto">
         <span className="text-[10px] font-sans font-bold tracking-[0.3em] text-[#755b00] uppercase">
           THE DRISTHI COLLECTIONS

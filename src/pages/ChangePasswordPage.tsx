@@ -16,6 +16,13 @@ export const ChangePasswordPage: React.FC<ChangePasswordPageProps> = ({ onNaviga
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
+  // The leading lock/key icons are a hint for an empty field — they disappear
+  // while the user is typing so they never overlap the entered text.
+  const [oldFocused, setOldFocused] = useState(false);
+  const [newFocused, setNewFocused] = useState(false);
+  const showOldIcon = !oldFocused && !oldPass;
+  const showNewIcon = !newFocused && !newPass;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPass.length < 8) {
@@ -42,7 +49,7 @@ export const ChangePasswordPage: React.FC<ChangePasswordPageProps> = ({ onNaviga
         onClick={() => onNavigate('/profile')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Account
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#c6c5d0]/30 space-y-6">
@@ -59,10 +66,14 @@ export const ChangePasswordPage: React.FC<ChangePasswordPageProps> = ({ onNaviga
                 type={showOld ? 'text' : 'password'}
                 value={oldPass}
                 onChange={(e) => setOldPass(e.target.value)}
-                className="input-field w-full pl-9 pr-10"
+                onFocus={() => setOldFocused(true)}
+                onBlur={() => setOldFocused(false)}
+                className={`input-field w-full pr-10 ${showOldIcon ? 'pl-9' : ''}`}
                 required
               />
-              <Lock className="w-4 h-4 text-[#767680] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              {showOldIcon && (
+                <Lock className="w-4 h-4 text-[#767680] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              )}
               <button
                 type="button"
                 onClick={() => setShowOld(!showOld)}
@@ -80,10 +91,14 @@ export const ChangePasswordPage: React.FC<ChangePasswordPageProps> = ({ onNaviga
                 type={showNew ? 'text' : 'password'}
                 value={newPass}
                 onChange={(e) => setNewPass(e.target.value)}
-                className="input-field w-full pl-9 pr-10"
+                onFocus={() => setNewFocused(true)}
+                onBlur={() => setNewFocused(false)}
+                className={`input-field w-full pr-10 ${showNewIcon ? 'pl-9' : ''}`}
                 required
               />
-              <KeyRound className="w-4 h-4 text-[#767680] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              {showNewIcon && (
+                <KeyRound className="w-4 h-4 text-[#767680] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              )}
               <button
                 type="button"
                 onClick={() => setShowNew(!showNew)}

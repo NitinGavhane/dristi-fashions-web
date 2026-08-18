@@ -289,6 +289,11 @@ export const orderApi = {
     return apiGet<ApiOrder>(`/api/v1/orders/${orderId}`);
   },
 
+  /** Cancel a not-yet-dispatched order; paid orders are auto-refunded. */
+  cancel(orderId: string) {
+    return apiPost<{ message: string; orderStatus: string; refund: string | null }>(`/api/v1/orders/${orderId}/cancel`);
+  },
+
   /** Delivered orders only; the reason is stored on the order. */
   requestReturn(orderId: string, reason: string, evidence: string[] = []) {
     return apiPost<{ message: string; returnStatus: string }>(`/api/v1/orders/${orderId}/return`, { reason, evidence });
@@ -329,12 +334,10 @@ export const paymentApi = {
     });
   },
 
-  verify(data: { orderId: string; razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string }) {
+  verify(data: { orderId: string; cashfreeOrderId: string }) {
     return apiPost<{ message: string; invoiceNumber: string; paymentMethod?: string }>('/api/v1/payments/verify', {
       order_id: data.orderId,
-      razorpay_order_id: data.razorpayOrderId,
-      razorpay_payment_id: data.razorpayPaymentId,
-      razorpay_signature: data.razorpaySignature,
+      cashfree_order_id: data.cashfreeOrderId,
     });
   },
 };

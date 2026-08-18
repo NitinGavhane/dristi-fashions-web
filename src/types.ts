@@ -209,8 +209,10 @@ export interface ApiPaymentIntent {
   gateway: string;
   paymentMethod?: string | null;
   paymentStatus: string;
-  razorpayOrderId?: string | null;
-  razorpayKeyId?: string | null;
+  paymentSessionId?: string | null;
+  cashfreeOrderId?: string | null;
+  cashfreeEnvironment?: string | null;
+  returnUrl?: string | null;
   currency?: string | null;
   amountPaise?: number | null;
   /** True for Cash on Delivery — no gateway order is opened, nothing to verify. */
@@ -392,7 +394,7 @@ export interface Address {
 export type AddressInput = Omit<Address, 'id'>;
 
 /** Backend statuses, kept verbatim so nothing is lost in translation. */
-export type OrderStatus = 'placed' | 'processing' | 'dispatched' | 'out_for_delivery' | 'delivered' | 'cancelled';
+export type OrderStatus = 'pending_payment' | 'placed' | 'processing' | 'dispatched' | 'out_for_delivery' | 'delivered' | 'cancelled';
 
 export type ReturnStatus = 'requested' | 'replace_requested' | 'approved' | 'rejected' | 'picked_up' | 'completed';
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Loader2, Mail, MessageSquare, Send } from 'lucide-react';
+import { BackButton } from '../components/common/BackButton';
 import { useStore } from '../context/StoreContext';
 import { contactApi } from '../lib/api';
 import { errorMessage } from '../lib/apiClient';
@@ -79,6 +80,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <BackButton onNavigate={onNavigate} to="/" />
       <div className="text-center space-y-2">
         <span className="text-[10px] font-sans font-bold tracking-[0.3em] text-[#755b00] uppercase">
           CUSTOMER CARE

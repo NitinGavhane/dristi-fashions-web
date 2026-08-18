@@ -8,7 +8,7 @@ import { ApiError, errorMessage } from '../lib/apiClient';
 import { formatCurrency } from '../lib/format';
 import { PLACEHOLDER_IMAGE, mapPaymentMethod } from '../lib/mappers';
 import { CGST_PERCENTAGE, IGST_PERCENTAGE, SELLER_STATE, SGST_PERCENTAGE } from '../lib/pricing';
-import { PaymentCancelledError, loadRazorpay, openRazorpayCheckout } from '../lib/razorpay';
+import { PaymentCancelledError, loadCashfree, openCashfreeCheckout } from '../lib/cashfree';
 import { useAsync } from '../lib/useAsync';
 import type { Address } from '../types';
 
@@ -111,42 +111,37 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         return;
       }
 
-      const ready = await loadRazorpay();
+      const ready = await loadCashfree();
       if (!ready) throw new Error('The payment gateway could not be loaded.');
 
-      const result = await openRazorpayCheckout(
-        intent,
-        { name: user.fullName, email: user.email, contact: user.phone },
-        order.orderNumber,
-      );
+      await openCashfreeCheckout(intent);
 
-      setStage('verifying');
-      await paymentApi.verify({ orderId: order.id, ...result });
-
-      await refreshOrders();
-      showToast('Payment Confirmed', `Order ${order.orderNumber} is confirmed. Thank you!`, 'success');
-      onNavigate(`/orders/${order.id}`);
+      // The hosted checkout redirected the browser; the checkout return page
+      // completes verification and takes the customer to their order.
     } catch (err) {
       // The order exists either way; only the wording changes.
       if (err instanceof PaymentCancelledError) {
+        setStage('idle');
+        await refreshOrders();
         showToast(
           'Payment Not Completed',
-          `Order ${order.orderNumber} is saved as pending — you can pay for it from your orders.`,
+          `Order ${order.orderNumber} is saved as awaiting payment — you can pay for it from your orders.`,
           'info',
         );
+        onNavigate(`/orders/${order.id}`);
       } else if (err instanceof ApiError && err.statusCode === 503) {
+        setStage('idle');
+        await refreshOrders();
         showToast(
           'Payment Unavailable',
-          `Order ${order.orderNumber} was placed. Online payment is not available right now — our team will contact you.`,
+          `Order ${order.orderNumber} is saved as awaiting payment. Online payment is not available right now — our team will contact you.`,
           'info',
         );
+        onNavigate(`/orders/${order.id}`);
       } else {
+        setStage('idle');
         showToast('Payment Failed', errorMessage(err), 'error');
       }
-      await refreshOrders();
-      onNavigate(`/orders/${order.id}`);
-    } finally {
-      setStage('idle');
     }
   };
 
@@ -172,7 +167,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         onClick={() => onNavigate('/cart')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00] mb-6"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Bag
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#0d1648] mb-8">Checkout</h1>

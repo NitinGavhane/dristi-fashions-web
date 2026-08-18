@@ -29,6 +29,7 @@ interface OrderDetailPageProps {
 export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNavigate }) => {
   const { isAuthenticated, authLoading, showToast } = useStore();
   const [downloading, setDownloading] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
 
   const state = useAsync(() => orderApi.get(orderId), [orderId]);
   const order = state.data ? mapOrder(state.data) : null;
@@ -72,6 +73,28 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
     }
   };
 
+  /** Cancels a not-yet-dispatched order; paid orders are auto-refunded. */
+  const handleCancelOrder = async () => {
+    if (!order) return;
+    const paid = order.paymentStatus === 'paid';
+    const ok = window.confirm(
+      paid
+        ? `Cancel order ${order.orderNumber}? A refund will be initiated to your original payment method.`
+        : `Cancel order ${order.orderNumber}?`,
+    );
+    if (!ok) return;
+    setCancelling(true);
+    try {
+      const result = await orderApi.cancel(order.id);
+      showToast('Order Cancelled', result.message, 'info');
+      state.reload();
+    } catch (err) {
+      showToast('Cancel Failed', errorMessage(err), 'error');
+    } finally {
+      setCancelling(false);
+    }
+  };
+
   if (authLoading || state.loading) return <Spinner label="Loading your order…" className="min-h-[50vh]" />;
 
   if (!isAuthenticated) return null;
@@ -86,7 +109,7 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
         />
         <div className="text-center mt-6">
           <button onClick={() => onNavigate('/orders')} className="btn-outline text-xs px-6 py-2.5">
-            Back to My Orders
+            Back
           </button>
         </div>
       </div>
@@ -96,6 +119,8 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
   const cancelled = order.status === 'cancelled';
   const currentStep = ORDER_FLOW.indexOf(order.status);
   const canRequestReturn = order.status === 'delivered' && !order.returnStatus;
+  const canCancel = !cancelled && ['pending_payment', 'placed', 'processing'].includes(order.status);
+  const awaitingPayment = order.status === 'pending_payment';
 
   return (
     <div className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -105,7 +130,7 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
             onClick={() => onNavigate('/orders')}
             className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00] mb-2"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to My Orders
+            <ArrowLeft className="w-4 h-4" /> Back
           </button>
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#0d1648] break-all">{order.orderNumber}</h1>
           <p className="text-xs text-[#767680] font-sans mt-1">Placed on {formatDate(order.createdAt)}</p>
@@ -322,6 +347,32 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({ orderId, onNav
               );
             })()}
           </div>
+        </section>
+      )}
+
+      {/* Cancellation */}
+      {canCancel && (
+        <section className="bg-white rounded-xl border border-[#c6c5d0]/30 shadow-sm p-4 sm:p-6">
+          <h2 className="font-serif text-lg font-bold text-[#0d1648] mb-3">Cancel Order</h2>
+          {awaitingPayment ? (
+            <p className="text-xs text-[#46464f] font-sans mb-4">
+              This order is awaiting payment. It will be cancelled automatically if payment is not completed, and the
+              items will be released back to stock. You can cancel it manually anytime.
+            </p>
+          ) : (
+            <p className="text-xs text-[#46464f] font-sans mb-4">
+              You can cancel this order before it is dispatched.
+              {order.paymentStatus === 'paid' && ' Any amount paid will be refunded to your original payment method.'}
+            </p>
+          )}
+          <button
+            onClick={handleCancelOrder}
+            disabled={cancelling}
+            className="btn-outline text-[11px] px-6 py-2.5 inline-flex items-center gap-2 text-[#ba1a1a] border-[#f0a9a9] disabled:opacity-60"
+          >
+            {cancelling && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+            Cancel Order
+          </button>
         </section>
       )}
 

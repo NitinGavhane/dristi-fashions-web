@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowUpDown, Search, X } from 'lucide-react';
+import { BackButton } from '../components/common/BackButton';
 import { ProductCard } from '../components/common/ProductCard';
 import { EmptyState, ErrorState, ProductGridSkeleton } from '../components/common/States';
 import { catalogApi, type ProductQuery } from '../lib/api';
@@ -117,6 +118,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentPath, onNavigate 
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <BackButton onNavigate={onNavigate} to="/" className="mb-4" />
       <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-8 border border-[#c6c5d0]/30">
         <div className="relative w-full">
           <input
@@ -241,8 +243,12 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentPath, onNavigate 
       ) : (
         <EmptyState
           icon={<Search className="w-10 h-10" />}
-          title="No creations found"
-          message="Nothing matches your current search or filters. Try widening them."
+          title={searchQuery.trim() ? `No results for "${searchQuery.trim()}"` : 'No products found'}
+          message={
+            searchQuery.trim()
+              ? 'We could not find anything matching that search. Check the spelling or try a broader keyword like "saree" or "sandals".'
+              : 'No products match your current filters. Try widening them.'
+          }
           actionLabel={hasFilters ? 'Clear Filters & View Catalogue' : undefined}
           onAction={hasFilters ? clearAllFilters : undefined}
         />

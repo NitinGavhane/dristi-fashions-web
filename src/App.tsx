@@ -14,6 +14,7 @@ import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { CheckoutReturnPage } from './pages/CheckoutReturnPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { OrdersPage } from './pages/OrdersPage';
 import { OrderDetailPage } from './pages/OrderDetailPage';
@@ -26,7 +27,6 @@ import { ChangePasswordPage } from './pages/ChangePasswordPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { WishlistPage } from './pages/WishlistPage';
-import { BlogPage } from './pages/BlogPage';
 import { CategoriesPage } from './pages/CategoriesPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsConditionsPage } from './pages/TermsConditionsPage';
@@ -78,6 +78,8 @@ export default function App() {
         return <CartPage onNavigate={navigate} />;
       case '/checkout':
         return <CheckoutPage onNavigate={navigate} />;
+      case '/checkout/return':
+        return <CheckoutReturnPage currentPath={currentPath} onNavigate={navigate} />;
       case '/profile':
         return <ProfilePage onNavigate={navigate} />;
       case '/orders':
@@ -99,7 +101,7 @@ export default function App() {
       case '/wishlist':
         return <WishlistPage onNavigate={navigate} />;
       case '/blog':
-        return <BlogPage onNavigate={navigate} />;
+        return <NotFoundPage onNavigate={navigate} />;
       case '/categories':
         return <CategoriesPage onNavigate={navigate} />;
       case '/privacy-policy':

@@ -71,7 +71,7 @@ export const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({ onNaviga
         onClick={() => onNavigate('/')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Home
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <div className="text-center space-y-3 pb-4">

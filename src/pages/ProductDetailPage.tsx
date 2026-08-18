@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Star,
   Truck,
+  Zap,
 } from 'lucide-react';
 import { ProductCard } from '../components/common/ProductCard';
 import { ErrorState, ProductGridSkeleton, Spinner } from '../components/common/States';
@@ -52,6 +53,20 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
     setSelectedImage(0);
     setQuantity(1);
     setActiveTab('details');
+  }, [productId]);
+
+  // A shared product link arrives as /product/<id>?ref=CODE. Capture the code,
+  // remember it for registration, and count the click — otherwise a friend who
+  // lands here and signs up later would never be attributed to the referrer.
+  useEffect(() => {
+    const ref = new URLSearchParams(window.location.search).get('ref');
+    if (!ref) return;
+    try {
+      localStorage.setItem('dristi_referral', ref.toUpperCase());
+    } catch {
+      // Storage unavailable (private mode) — registration just won't prefill.
+    }
+    referralApi.trackClick(productId, ref.toUpperCase()).catch(() => {});
   }, [productId]);
 
   // Preselect the only option when there is just one, so a single-size piece
@@ -130,6 +145,26 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
     setAdding(true);
     try {
       await addToCart(product, { size: selectedSize, color: selectedColor, quantity });
+    } finally {
+      setAdding(false);
+    }
+  };
+
+  /** Buys this piece straight away: validates, bags it, jumps to checkout. */
+  const handleBuyNow = async () => {
+    if (!product) return;
+    if (needsSize) {
+      showToast('Select a Size', 'Please choose a size before buying.', 'info');
+      return;
+    }
+    if (needsColor) {
+      showToast('Select a Colour', 'Please choose a colour before buying.', 'info');
+      return;
+    }
+    setAdding(true);
+    try {
+      await addToCart(product, { size: selectedSize, color: selectedColor, quantity });
+      onNavigate('/checkout');
     } finally {
       setAdding(false);
     }
@@ -412,40 +447,55 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
           </div>
 
           {/* Actions */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={handleAddToCart}
-              disabled={outOfStock || adding}
-              className="btn-primary flex-1 py-3.5 text-xs tracking-widest inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
-              <span>{outOfStock ? 'OUT OF STOCK' : 'ADD TO BAG'}</span>
-            </button>
+          <div className="mt-6 space-y-3">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={handleAddToCart}
+                disabled={outOfStock || adding}
+                className="btn-primary flex-1 py-3.5 text-xs tracking-widest inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
+                <span>{outOfStock ? 'OUT OF STOCK' : 'ADD TO BAG'}</span>
+              </button>
 
-            <button
-              onClick={() => void toggleWishlist(product)}
-              className="btn-outline px-5 py-3.5 inline-flex items-center justify-center gap-2 text-xs"
-              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            >
-              <Heart className={`w-4 h-4 ${wishlisted ? 'fill-[#ba1a1a] text-[#ba1a1a]' : ''}`} />
-              <span className="sm:hidden">{wishlisted ? 'Saved' : 'Wishlist'}</span>
-            </button>
+              {!outOfStock && (
+                <button
+                  onClick={handleBuyNow}
+                  disabled={adding}
+                  className="btn-buy flex-1 py-3.5 text-xs tracking-widest inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Zap className="w-4 h-4" />
+                  <span>BUY NOW</span>
+                </button>
+              )}
+            </div>
 
-            <button
-              onClick={handleShare}
-              className="btn-outline px-5 py-3.5 inline-flex items-center justify-center gap-2 text-xs"
-              aria-label="Share this piece"
-            >
-              <Share2 className="w-4 h-4" />
-              <span className="sm:hidden">Share</span>
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => void toggleWishlist(product)}
+                className="btn-outline flex-1 py-3.5 inline-flex items-center justify-center gap-2 text-xs"
+                aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              >
+                <Heart className={`w-4 h-4 ${wishlisted ? 'fill-[#ba1a1a] text-[#ba1a1a]' : ''}`} />
+                <span>{wishlisted ? 'Saved' : 'Wishlist'}</span>
+              </button>
+
+              <button
+                onClick={handleShare}
+                className="btn-outline flex-1 py-3.5 inline-flex items-center justify-center gap-2 text-xs"
+                aria-label="Share this piece"
+              >
+                <Share2 className="w-4 h-4" />
+                <span>Share</span>
+              </button>
+            </div>
           </div>
 
           {/* Policies — driven by the flags on this specific product. */}
           <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] font-sans">
             <div className="flex items-center gap-2 text-[#46464f]">
               <ShieldCheck className="w-4 h-4 text-[#755b00] shrink-0" />
-              <span>Secure Razorpay checkout</span>
+              <span>Secure Cashfree checkout</span>
             </div>
             <div className="flex items-center gap-2 text-[#46464f]">
               <Truck className="w-4 h-4 text-[#755b00] shrink-0" />

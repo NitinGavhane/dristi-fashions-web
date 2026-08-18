@@ -231,7 +231,7 @@ export function formatAddressLine(address: Address): string {
     .join(', ');
 }
 
-const ORDER_STATUSES: OrderStatus[] = ['placed', 'processing', 'dispatched', 'out_for_delivery', 'delivered', 'cancelled'];
+const ORDER_STATUSES: OrderStatus[] = ['pending_payment', 'placed', 'processing', 'dispatched', 'out_for_delivery', 'delivered', 'cancelled'];
 const RETURN_STATUSES: ReturnStatus[] = ['requested', 'replace_requested', 'approved', 'rejected', 'completed'];
 
 export function mapOrder(api: ApiOrder): Order {

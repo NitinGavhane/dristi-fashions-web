@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Calendar, Newspaper, User } from 'lucide-react';
+import { BackButton } from '../components/common/BackButton';
 import { EmptyState, ErrorState, Spinner } from '../components/common/States';
 import { blogApi } from '../lib/api';
 import { formatDate } from '../lib/format';
@@ -19,11 +20,19 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigate }) => {
   // list response already carries the full content.
   const [openPost, setOpenPost] = useState<BlogPost | null>(null);
 
-  if (state.loading) return <Spinner label="Loading the journal…" className="min-h-[50vh]" />;
+  if (state.loading) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-8">
+        <BackButton onNavigate={onNavigate} to="/" className="mb-6" />
+        <Spinner label="Loading the journal…" className="min-h-[50vh]" />
+      </div>
+    );
+  }
 
   if (state.error) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16">
+        <BackButton onNavigate={onNavigate} to="/" className="mb-6" />
         <ErrorState message={state.error} onRetry={state.reload} />
       </div>
     );
@@ -36,7 +45,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigate }) => {
           onClick={() => setOpenPost(null)}
           className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to the Journal
+          <ArrowLeft className="w-4 h-4" /> Back
         </button>
 
         {openPost.image && (
@@ -69,6 +78,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigate }) => {
   if (posts.length === 0) {
     return (
       <div className="min-h-[60vh] max-w-md mx-auto px-4 py-16">
+        <BackButton onNavigate={onNavigate} to="/" className="mb-6" />
         <EmptyState
           icon={<Newspaper className="w-12 h-12" />}
           title="No stories yet"
@@ -84,6 +94,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <BackButton onNavigate={onNavigate} to="/" />
       <div className="text-center space-y-2 max-w-2xl mx-auto">
         <span className="text-[10px] font-sans font-bold tracking-[0.3em] text-[#755b00] uppercase">
           THE DRISTHI JOURNAL

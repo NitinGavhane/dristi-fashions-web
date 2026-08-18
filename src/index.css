@@ -136,6 +136,30 @@
   border-color: transparent;
 }
 
+/* "Buy now" — deep navy with gold text, distinct from the gold primary so the
+   two checkout actions read as different choices on the product page. */
+.btn-buy {
+  background: linear-gradient(180deg, #0d1648 0%, #181a2d 100%);
+  color: #fed255;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.875rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 8px rgba(8, 16, 58, 0.18);
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.25rem;
+}
+
+.btn-buy:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 4px 12px rgba(8, 16, 58, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-buy:active {
+  transform: translateY(0);
+}
+
 .card {
   background-color: #ffffff;
   border: 1px solid rgba(198, 197, 208, 0.35);

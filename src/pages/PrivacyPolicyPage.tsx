@@ -43,7 +43,7 @@ const SECTIONS: Section[] = [
   {
     heading: '4. Cookies and Tracking Technologies',
     paragraph:
-      'We use cookies, pixel tags, log files, and third-party SDKs (such as analytics and payment gateways like Razorpay, PayU, or CashFree) to make our Platform function smoothly.',
+      'We use cookies, pixel tags, log files, and third-party SDKs (such as analytics and payment gateways like Cashfree) to make our Platform function smoothly.',
     bullets: [
       'Strictly Necessary Cookies: Required for basic site navigation, security, and account logins. Disabling these may impact platform functionality.',
       'Functional & Performance Cookies: Help remember your preferences (like region or font size) and analyse traffic to improve our services.',
@@ -90,7 +90,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
         onClick={() => onNavigate('/')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Home
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <div className="text-center space-y-3 pb-4">

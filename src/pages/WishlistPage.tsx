@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Trash2 } from 'lucide-react';
+import { ArrowLeft, Heart, Trash2 } from 'lucide-react';
 import { EmptyState, Spinner } from '../components/common/States';
 import { useStore } from '../context/StoreContext';
 import { formatCurrency } from '../lib/format';
@@ -17,6 +17,12 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({ onNavigate }) => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[60vh] max-w-md mx-auto px-4 py-16">
+        <button
+          onClick={() => onNavigate('/profile')}
+          className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00] mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back
+        </button>
         <EmptyState
           icon={<Heart className="w-12 h-12" />}
           title="My Wishlist"
@@ -31,6 +37,12 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({ onNavigate }) => {
   if (wishlist.length === 0) {
     return (
       <div className="min-h-[60vh] max-w-md mx-auto px-4 py-16">
+        <button
+          onClick={() => onNavigate('/profile')}
+          className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00] mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back
+        </button>
         <EmptyState
           icon={<Heart className="w-12 h-12" />}
           title="Your wishlist is empty"
@@ -44,6 +56,13 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <button
+        onClick={() => onNavigate('/profile')}
+        className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
+      >
+        <ArrowLeft className="w-4 h-4" /> Back
+      </button>
+
       <div className="border-b border-[#c6c5d0]/30 pb-4">
         <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#0d1648]">
           My Wishlist <span className="text-[#755b00]">({wishlist.length})</span>

@@ -22,11 +22,19 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ currentPath, onNavig
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // A referral link lands as /register?ref=CODE — prefill it so the referrer
-  // actually gets credited.
+  // A referral link lands as /register?ref=CODE, but a friend may also arrive
+  // via a shared product link (/product/<id>?ref=CODE) and only reach this page
+  // later — the code is stashed in localStorage then, so prefill from either.
   useEffect(() => {
     const query = currentPath.includes('?') ? currentPath.slice(currentPath.indexOf('?')) : window.location.search;
-    const ref = new URLSearchParams(query).get('ref');
+    let ref = new URLSearchParams(query).get('ref');
+    if (!ref) {
+      try {
+        ref = localStorage.getItem('dristi_referral');
+      } catch {
+        ref = null;
+      }
+    }
     if (ref) setReferralCode(ref.toUpperCase());
   }, [currentPath]);
 

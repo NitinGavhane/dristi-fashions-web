@@ -104,7 +104,7 @@ export const ReturnReplacePage: React.FC<ReturnReplacePageProps> = ({ orderId, o
         />
         <div className="text-center">
           <button onClick={() => onNavigate(`/orders/${order.id}`)} className="btn-outline text-xs px-6 py-2.5">
-            Back to Order
+            Back
           </button>
         </div>
       </div>
@@ -124,7 +124,7 @@ export const ReturnReplacePage: React.FC<ReturnReplacePageProps> = ({ orderId, o
             onClick={() => onNavigate(`/orders/${order.id}`)}
             className="btn-primary text-xs px-6 py-2.5 mt-5"
           >
-            Back to Order
+            Back
           </button>
         </div>
       </div>
@@ -137,7 +137,7 @@ export const ReturnReplacePage: React.FC<ReturnReplacePageProps> = ({ orderId, o
         onClick={() => onNavigate(`/orders/${order.id}`)}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00] mb-6"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to {order.orderNumber}
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#c6c5d0]/30 space-y-6">

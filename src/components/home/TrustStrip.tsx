@@ -3,14 +3,14 @@ import { FileText, Lock, RefreshCw, Truck } from 'lucide-react';
 
 /**
  * Claims here are deliberately limited to what the platform genuinely does:
- * Razorpay-backed payments, GST invoices, tracked delivery, and returns on the
+ * Cashfree-backed payments, GST invoices, tracked delivery, and returns on the
  * pieces flagged returnable — never a blanket promise the store cannot keep.
  */
 const ITEMS = [
   {
     icon: <Lock className="w-6 h-6 text-[#755b00]" />,
     title: 'SECURE PAYMENTS',
-    subtitle: 'UPI, cards and net banking via Razorpay',
+    subtitle: 'UPI, cards and net banking via Cashfree',
   },
   {
     icon: <FileText className="w-6 h-6 text-[#755b00]" />,

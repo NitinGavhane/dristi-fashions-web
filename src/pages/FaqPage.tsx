@@ -50,7 +50,7 @@ const CATEGORIES: FaqCategory[] = [
     items: [
       {
         q: 'What payment methods do you accept?',
-        a: 'We accept a wide range of secure payment options through our Payment Gateway Channel (Razorpay, PayU, or Cashfree), including Credit Cards and Debit Cards (Visa, MasterCard, Maestro, RuPay), Net Banking across all major banks, UPI apps (Google Pay, PhonePe, Paytm, etc.), popular digital wallets and e-Gift cards, and Cash on Delivery (COD).',
+        a: 'We accept secure online payments through our Payment Gateway (Cashfree), including Credit Cards and Debit Cards (Visa, MasterCard, Maestro, RuPay), Net Banking across all major banks, UPI apps (Google Pay, PhonePe, Paytm, etc.), popular digital wallets and Cash on Delivery (COD).',
       },
       {
         q: 'How do I apply a discount or promo code?',
@@ -58,7 +58,7 @@ const CATEGORIES: FaqCategory[] = [
       },
       {
         q: 'Is it safe to use my credit/debit card on your platform?',
-        a: 'Yes, absolutely. All online transactions are processed through encrypted, secure payment gateways (such as Razorpay and PayU). Drishti Fashions never stores your complete card details or CVV.',
+        a: 'Yes, absolutely. All online transactions are processed through encrypted, secure payment gateways (such as Cashfree). Drishti Fashions never stores your complete card details or CVV.',
       },
     ],
   },
@@ -92,7 +92,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
         onClick={() => onNavigate('/')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Home
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <div className="text-center space-y-3 pb-4">

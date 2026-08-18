@@ -58,7 +58,7 @@ export const AddressesPage: React.FC<AddressesPageProps> = ({ onNavigate }) => {
         onClick={() => onNavigate('/profile')}
         className="inline-flex items-center gap-2 text-xs font-bold text-[#0d1648] hover:text-[#755b00]"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Account
+        <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#c6c5d0]/30 pb-4">
