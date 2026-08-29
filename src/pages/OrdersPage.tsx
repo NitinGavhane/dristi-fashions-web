@@ -15,6 +15,18 @@ interface OrdersPageProps {
 export const OrdersPage: React.FC<OrdersPageProps> = ({ onNavigate }) => {
   const { isAuthenticated, authLoading, orders, ordersLoading, refreshOrders, showToast } = useStore();
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [filter, setFilter] = useState('All');
+
+  // Status groups match the mobile app's My Orders tabs.
+  const FILTERS: { label: string; statuses?: string[] }[] = [
+    { label: 'All' },
+    { label: 'Active', statuses: ['pending_payment', 'placed', 'processing'] },
+    { label: 'Shipped', statuses: ['dispatched', 'out_for_delivery'] },
+    { label: 'Delivered', statuses: ['delivered'] },
+    { label: 'Cancelled', statuses: ['cancelled'] },
+  ];
+  const filteredOrders =
+    filter === 'All' ? orders : orders.filter(o => (FILTERS.find(f => f.label === filter)?.statuses ?? []).includes(o.status));
 
   // Statuses change on the admin side, so re-fetch whenever this page opens.
   useEffect(() => {
@@ -100,10 +112,35 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ onNavigate }) => {
         <p className="text-xs text-[#767680] font-sans mt-1">Track your shipments and download GST invoices.</p>
       </div>
 
-      <div className="space-y-4">
-        {orders.map(order => {
-          const canCancel = ['pending_payment', 'placed', 'processing'].includes(order.status);
+      <div className="flex flex-wrap gap-2">
+        {FILTERS.map(f => {
+          const active = filter === f.label;
+          const count = f.statuses ? orders.filter(o => f.statuses!.includes(o.status)).length : orders.length;
           return (
+            <button
+              key={f.label}
+              onClick={() => setFilter(f.label)}
+              className={`rounded-full px-4 py-1.5 text-xs font-bold font-sans border transition-colors ${
+                active
+                  ? 'bg-[#0d1648] text-[#ffe08e] border-[#0d1648]'
+                  : 'bg-[#f4f2ff] text-[#0d1648] border-[#c6c5d0] hover:border-[#755b00]'
+              }`}
+            >
+              {f.label} <span className="opacity-70">({count})</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {filteredOrders.length === 0 ? (
+        <div className="bg-white rounded-xl border border-[#c6c5d0]/30 shadow-sm p-10 text-center">
+          <p className="text-sm text-[#767680] font-sans">No orders in this view.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredOrders.map(order => {
+            const canCancel = ['pending_payment', 'placed', 'processing'].includes(order.status);
+            return (
             <div
               key={order.id}
               onClick={() => onNavigate(`/orders/${order.id}`)}
@@ -161,7 +198,8 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ onNavigate }) => {
             </div>
           );
         })}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

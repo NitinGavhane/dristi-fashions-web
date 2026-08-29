@@ -133,15 +133,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
             </button>
           </div>
         </form>
-
-        <div className="pt-4 border-t border-[#c6c5d0]/30">
-          <button
-            onClick={() => onNavigate('/profile/change-password')}
-            className="text-xs font-bold text-[#755b00] hover:underline"
-          >
-            Change your password →
-          </button>
-        </div>
       </div>
     </div>
   );

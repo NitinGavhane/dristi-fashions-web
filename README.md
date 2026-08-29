@@ -1,8 +1,7 @@
-# Dristi Fashions — Storefront
+# dristi-fashions-web
 
-React + Vite storefront for the Garment E-commerce Platform. Every screen reads
-from the FastAPI backend in [`../backend`](../backend); there is no mock data in
-the app.
+React + Vite storefront for Dristi Fashions — the user-facing website. Every screen reads
+from the `dristi-backend` FastAPI backend; there is no mock data in the app.
 
 ## Run locally
 
@@ -62,19 +61,7 @@ CLI isn't on your `PATH`, set `AWS_CLI` to its full path before running.
 | `src/lib/apiClient.ts` | fetch wrapper: base URL, bearer token storage, refresh-and-replay on 401/403, snake_case → camelCase |
 | `src/lib/api.ts` | one typed function per backend endpoint; the only place paths and request bodies are written |
 | `src/lib/mappers.ts` | converts backend DTOs into the UI's domain model |
-| `src/lib/pricing.ts` | client-side mirror of the backend's GST and delivery rules |
-| `src/context/StoreContext.tsx` | session, cart, wishlist, addresses, orders and wallet state |
-
-Backend responses are snake_case and the UI is camelCase; `apiClient` converts
-responses automatically, while request bodies are written in snake_case by hand
-inside `src/lib/api.ts`.
-
-### Pricing must stay in step
-
-`src/lib/pricing.ts` duplicates `app/core/gst.py` and
-`app/services/delivery_service.py` so the cart and checkout can quote a total
-*before* the order exists. The backend is always authoritative — if the two ever
-disagree, the customer is shown a price we do not charge. Update both together.
+| `src/lib/pricing.ts` | client-side mirror of the backend's GST and delivery rules so the cart and checkout can quote a total *before* the order exists. The backend is always authoritative — if the two ever disagree, the customer is shown a price we do not charge. Update both together.
 
 Currently: 9% CGST + 9% SGST for a West Bengal delivery address, 18% IGST
 elsewhere, applied on top of the item subtotal. Delivery charges come from
