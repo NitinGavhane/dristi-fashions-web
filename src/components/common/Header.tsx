@@ -310,6 +310,12 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
             exceed the bar at exactly 1024px. */}
         {categories.length > 0 && (
           <div className="hidden lg:flex flex-wrap items-center justify-center gap-x-6 xl:gap-x-8 gap-y-1 py-2.5 border-t border-[#fed255]/20 text-xs font-sans text-[#e0e0fb]">
+            <button
+              onClick={() => onNavigate('/')}
+              className="hover:text-[#fed255] transition-colors py-1 whitespace-nowrap"
+            >
+              Home
+            </button>
             {categories.map(cat => (
               <button
                 key={cat.id}
@@ -324,6 +330,12 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
               className="text-[#fed255] font-semibold hover:underline whitespace-nowrap"
             >
               The Journal
+            </button>
+            <button
+              onClick={() => onNavigate('/contact')}
+              className="hover:text-[#fed255] transition-colors py-1 whitespace-nowrap"
+            >
+              Contact Us
             </button>
           </div>
         )}
@@ -405,6 +417,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
                   Quick Navigation
                 </p>
                 {[
+                  { label: 'Home', path: '/' },
                   { label: 'All Collections', path: '/categories' },
                   { label: 'My Orders', path: '/orders' },
                   { label: `My Wishlist (${wishlist.length})`, path: '/wishlist' },
