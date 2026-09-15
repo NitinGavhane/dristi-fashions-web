@@ -40,6 +40,12 @@ export interface ApiProductImage {
   isPrimary: boolean;
 }
 
+export interface ApiProductVideo {
+  id: string;
+  videoUrl: string;
+  thumbnailUrl?: string | null;
+}
+
 /** Shape of `GET /products` rows. */
 export interface ApiProductListItem {
   id: string;
@@ -68,13 +74,14 @@ export interface ApiProductListItem {
   isReturnable: boolean;
 }
 
-/** `GET /products/{id}` — the list row plus variants, all images and GST rates. */
+/** `GET /products/{id}` — the list row plus variants, all images/videos and GST rates. */
 export interface ApiProduct extends ApiProductListItem {
   cgstPercentage: number;
   sgstPercentage: number;
   igstPercentage: number;
   variants: ApiVariant[];
   images: ApiProductImage[];
+  videos: ApiProductVideo[];
 }
 
 export interface ApiCategory {
@@ -299,6 +306,11 @@ export interface ProductVariant {
   price: number | null;
 }
 
+export interface ProductVideo {
+  url: string;
+  thumbnail: string | null;
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -314,6 +326,8 @@ export interface Product {
   category: string;
   gender: GenderCategory;
   images: string[];
+  /** Product videos (at most one in practice); empty on list rows. */
+  videos: ProductVideo[];
   sizes: string[];
   colors: string[];
   variants: ProductVariant[];

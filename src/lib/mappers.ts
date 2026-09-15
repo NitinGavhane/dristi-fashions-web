@@ -107,6 +107,10 @@ function mapImages(api: ApiProductListItem | ApiProduct): string[] {
 export function mapProduct(api: ApiProductListItem | ApiProduct): Product {
   const detail = api as ApiProduct;
   const images = mapImages(api);
+  // Only the detail response carries videos; list rows leave the array empty.
+  const videos = (detail.videos ?? [])
+    .filter(v => v.videoUrl)
+    .map(v => ({ url: v.videoUrl, thumbnail: v.thumbnailUrl ?? null }));
   return {
     id: api.id,
     title: api.title,
@@ -120,6 +124,7 @@ export function mapProduct(api: ApiProductListItem | ApiProduct): Product {
     category: api.categoryName ?? 'Collection',
     gender: toUiGender(api.gender),
     images: images.length ? images : [PLACEHOLDER_IMAGE],
+    videos,
     sizes: api.sizes ?? [],
     colors: api.colors ?? [],
     variants: detail.variants ? mapVariants(detail) : [],

@@ -20,13 +20,8 @@ const SORT_OPTIONS: { value: string; label: string }[] = [
   { value: 'price_desc', label: 'Price: High to Low' },
 ];
 
-const PRICE_CAPS = [
-  { value: 0, label: 'All Prices' },
-  { value: 1000, label: `Under ${formatCurrency(1000)}` },
-  { value: 2500, label: `Under ${formatCurrency(2500)}` },
-  { value: 5000, label: `Under ${formatCurrency(5000)}` },
-  { value: 10000, label: `Under ${formatCurrency(10000)}` },
-];
+// Circular quick "under ₹X" price-filter buttons shown above the results.
+const PRICE_CHIPS = [199, 299, 499, 799, 999];
 
 const GENDERS: { value: GenderCategory; label: string }[] = [
   { value: 'ALL', label: 'All Genders' },
@@ -172,14 +167,6 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentPath, onNavigate 
               ))}
             </select>
 
-            <select value={maxPrice} onChange={e => setMaxPrice(Number(e.target.value))} className={selectClass}>
-              {PRICE_CAPS.map(p => (
-                <option key={p.value} value={p.value}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
-
             <button
               onClick={() => setFeaturedOnly(v => !v)}
               aria-pressed={featuredOnly}
@@ -219,6 +206,33 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentPath, onNavigate 
             </select>
           </div>
         </div>
+      </div>
+
+      {/* Circular quick price filters. Tapping one caps results at that price;
+          tapping the active one clears it. */}
+      <div className="mb-8 flex flex-wrap items-center gap-3 sm:gap-4">
+        {PRICE_CHIPS.map(value => {
+          const active = maxPrice === value;
+          return (
+            <button
+              key={value}
+              onClick={() => setMaxPrice(active ? 0 : value)}
+              aria-pressed={active}
+              className="flex flex-col items-center gap-1 focus:outline-none"
+            >
+              <span
+                className={`flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border-2 text-sm font-bold transition-all ${
+                  active
+                    ? 'bg-[#0d1648] text-[#fed255] border-[#0d1648] shadow-md scale-105'
+                    : 'bg-white text-[#0d1648] border-[#c6c5d0] hover:border-[#755b00]'
+                }`}
+              >
+                {formatCurrency(value)}
+              </span>
+              <span className={`text-[10px] font-semibold ${active ? 'text-[#755b00]' : 'text-[#767680]'}`}>Under</span>
+            </button>
+          );
+        })}
       </div>
 
       {!products.loading && !products.error && (

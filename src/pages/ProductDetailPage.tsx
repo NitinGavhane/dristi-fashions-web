@@ -4,6 +4,7 @@ import {
   Heart,
   Loader2,
   Minus,
+  Play,
   Plus,
   RotateCcw,
   Share2,
@@ -254,6 +255,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
   const wishlisted = isInWishlist(product.id);
   const outOfStock = availableStock <= 0;
 
+  // The video (if any) sits after the photos as an extra gallery slot; the last
+  // index selects it and swaps the main frame from an <img> to a <video>.
+  const video = product.videos[0] ?? null;
+  const isVideoSlot = Boolean(video) && selectedImage >= product.images.length;
+
   return (
     <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb — category and product names are both seller-supplied and
@@ -277,14 +283,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 bg-white rounded-2xl p-4 sm:p-10 shadow-lg border border-[#c6c5d0]/30 mb-12">
         {/* Gallery */}
         <div className="lg:col-span-7 min-w-0 flex flex-col-reverse sm:flex-row gap-4">
-          {product.images.length > 1 && (
+          {(product.images.length > 1 || video) && (
             <div className="flex sm:flex-col gap-3 scroll-rail sm:overflow-visible no-scrollbar shrink-0">
               {product.images.map((img, idx) => (
                 <button
                   key={`${img}-${idx}`}
                   onClick={() => setSelectedImage(idx)}
                   className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-lg overflow-hidden border-2 transition-all shrink-0 ${
-                    selectedImage === idx
+                    selectedImage === idx && !isVideoSlot
                       ? 'border-[#755b00] ring-2 ring-[#fed255]'
                       : 'border-[#c6c5d0]/40 opacity-70 hover:opacity-100'
                   }`}
@@ -293,19 +299,57 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
                   <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
+              {video && (
+                <button
+                  onClick={() => setSelectedImage(product.images.length)}
+                  className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-lg overflow-hidden border-2 transition-all shrink-0 bg-black ${
+                    isVideoSlot
+                      ? 'border-[#755b00] ring-2 ring-[#fed255]'
+                      : 'border-[#c6c5d0]/40 opacity-80 hover:opacity-100'
+                  }`}
+                  aria-label="Watch product video"
+                >
+                  {video.thumbnail ? (
+                    <img src={video.thumbnail} alt="" className="w-full h-full object-cover opacity-80" />
+                  ) : (
+                    <img
+                      src={product.images[0] || PLACEHOLDER_IMAGE}
+                      alt=""
+                      className="w-full h-full object-cover opacity-60"
+                    />
+                  )}
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="w-7 h-7 rounded-full bg-black/60 flex items-center justify-center">
+                      <Play className="w-3.5 h-3.5 text-white fill-white" />
+                    </span>
+                  </span>
+                </button>
+              )}
             </div>
           )}
 
           <div className="relative flex-1 aspect-[3/4] rounded-xl overflow-hidden bg-[#f4f2ff] shadow-inner">
-            <img
-              src={product.images[selectedImage] || product.images[0] || PLACEHOLDER_IMAGE}
-              alt={product.title}
-              onError={e => {
-                (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMAGE;
-              }}
-              className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
-            />
-            {product.discountPercentage > 0 && (
+            {isVideoSlot && video ? (
+              <video
+                key={video.url}
+                src={video.url}
+                poster={video.thumbnail ?? undefined}
+                controls
+                playsInline
+                controlsList="nodownload"
+                className="w-full h-full object-contain bg-black"
+              />
+            ) : (
+              <img
+                src={product.images[selectedImage] || product.images[0] || PLACEHOLDER_IMAGE}
+                alt={product.title}
+                onError={e => {
+                  (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMAGE;
+                }}
+                className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+              />
+            )}
+            {product.discountPercentage > 0 && !isVideoSlot && (
               <span className="absolute top-4 left-4 bg-[#755b00] text-[#ffe08e] text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded shadow">
                 {product.discountPercentage}% OFF
               </span>
