@@ -690,26 +690,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
         </div>
       </div>
 
-      {/* Product video — also offered here below the details, in addition to
-          the gallery slide, for shoppers who scroll past the thumbnails. */}
-      {video && (
-        <section className="bg-white rounded-2xl shadow-lg border border-[#c6c5d0]/30 mb-12 overflow-hidden">
-          <h2 className="font-serif text-xl font-bold text-[#0d1648] px-6 sm:px-8 pt-6 pb-4 border-b border-[#c6c5d0]/40">
-            Product Video
-          </h2>
-          <div className="p-6 sm:p-8">
-            <video
-              src={video.url}
-              poster={video.thumbnail ?? undefined}
-              controls
-              playsInline
-              controlsList="nodownload"
-              className="w-full max-h-[70vh] rounded-xl object-contain bg-black"
-            />
-          </div>
-        </section>
-      )}
-
       {/* Related */}
       {(related.loading || relatedProducts.length > 0) && (
         <section>
