@@ -12,6 +12,7 @@ import type {
   ApiBlogPost,
   ApiCart,
   ApiCategory,
+  ApiDeletionEligibility,
   ApiDeliverySettings,
   ApiHomeContent,
   ApiOrder,
@@ -34,6 +35,8 @@ import type {
 
 export interface LoginResult extends ApiAuthTokens {
   user?: ApiUser;
+  /** True when this sign-in brought a deactivated account back to life. */
+  reactivated?: boolean;
 }
 
 export const authApi = {
@@ -100,6 +103,43 @@ export const authApi = {
       ...(data.email !== undefined ? { email: data.email } : {}),
       ...(data.phone !== undefined ? { phone: data.phone } : {}),
       ...(data.avatarUrl !== undefined ? { avatar_url: data.avatarUrl } : {}),
+    });
+  },
+
+  /* --- Account deactivation & deletion --------------------------------- */
+  /* Deactivation is reversible and undone by signing in again, so there is   */
+  /* no reactivate call. Deletion is permanent and needs the OTP plus all     */
+  /* three acknowledgements, which the backend re-checks.                     */
+
+  sendDeactivationOtp() {
+    return apiPost<{ message?: string }>('/api/v1/auth/deactivate/send-otp', {});
+  },
+
+  deactivate(otp: string) {
+    return apiPost<{ message?: string; accountStatus?: string }>('/api/v1/auth/deactivate', { otp });
+  },
+
+  deletionEligibility() {
+    return apiGet<ApiDeletionEligibility>('/api/v1/auth/delete/eligibility');
+  },
+
+  sendDeletionOtp() {
+    return apiPost<{ message?: string }>('/api/v1/auth/delete/send-otp', {});
+  },
+
+  deleteAccount(data: {
+    otp: string;
+    reason: string;
+    acceptedTerms: boolean;
+    acknowledgedBalanceForfeit: boolean;
+    acknowledgedNoReturns: boolean;
+  }) {
+    return apiPost<{ message?: string; accountStatus?: string }>('/api/v1/auth/delete', {
+      otp: data.otp,
+      reason: data.reason,
+      accepted_terms: data.acceptedTerms,
+      acknowledged_balance_forfeit: data.acknowledgedBalanceForfeit,
+      acknowledged_no_returns: data.acknowledgedNoReturns,
     });
   },
 

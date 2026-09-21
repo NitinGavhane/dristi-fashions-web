@@ -23,6 +23,8 @@ import { AddressesPage } from './pages/AddressesPage';
 import { WalletPage } from './pages/WalletPage';
 import { ReferralPage } from './pages/ReferralPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { DeactivateAccountPage } from './pages/DeactivateAccountPage';
+import { DeleteAccountPage } from './pages/DeleteAccountPage';
 import { ChangePasswordPage } from './pages/ChangePasswordPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
@@ -94,6 +96,10 @@ export default function App() {
         return <SettingsPage onNavigate={navigate} />;
       case '/profile/change-password':
         return <ChangePasswordPage onNavigate={navigate} />;
+      case '/profile/deactivate':
+        return <DeactivateAccountPage onNavigate={navigate} />;
+      case '/profile/delete':
+        return <DeleteAccountPage onNavigate={navigate} />;
       case '/profile/about':
         return <AboutPage onNavigate={navigate} />;
       case '/contact':

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, Loader2, Mail, Phone, Save, User } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Loader2, Mail, PauseCircle, Phone, Save, Trash2, User } from 'lucide-react';
 import { EmptyState, Spinner } from '../components/common/States';
 import { useStore } from '../context/StoreContext';
 
@@ -133,6 +133,50 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
             </button>
           </div>
         </form>
+      </div>
+
+      {/* Kept in its own card, below the form, so neither route is ever a
+          mis-click away from saving a name. Deactivate is listed first: it is
+          what most people who get this far actually want. */}
+      <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#ba1a1a]/20 space-y-4">
+        <div>
+          <h2 className="font-serif text-lg font-bold text-[#0d1648]">Account Control</h2>
+          <p className="text-xs text-[#767680] font-sans mt-1">
+            Take a break, or close your account for good.
+          </p>
+        </div>
+
+        <button
+          onClick={() => onNavigate('/profile/deactivate')}
+          className="w-full flex items-center gap-3 rounded-xl border border-[#c6c5d0]/60 p-4 text-left hover:border-[#755b00]/40 transition-colors"
+        >
+          <span className="p-2 rounded-lg bg-[#f4f2ff] shrink-0">
+            <PauseCircle className="w-4 h-4 text-[#755b00]" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-[#0d1648] font-sans">Deactivate Account</span>
+            <span className="block text-[11px] text-[#767680] font-sans mt-0.5">
+              Nothing is deleted — sign in again to restore everything
+            </span>
+          </span>
+          <ChevronRight className="w-4 h-4 text-[#c6c5d0] shrink-0" />
+        </button>
+
+        <button
+          onClick={() => onNavigate('/profile/delete')}
+          className="w-full flex items-center gap-3 rounded-xl border border-[#ba1a1a]/30 p-4 text-left hover:border-[#ba1a1a]/60 transition-colors"
+        >
+          <span className="p-2 rounded-lg bg-[#ffdad6] shrink-0">
+            <Trash2 className="w-4 h-4 text-[#ba1a1a]" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-[#ba1a1a] font-sans">Delete Account</span>
+            <span className="block text-[11px] text-[#767680] font-sans mt-0.5">
+              Permanently delete your account and data — this cannot be undone
+            </span>
+          </span>
+          <ChevronRight className="w-4 h-4 text-[#c6c5d0] shrink-0" />
+        </button>
       </div>
     </div>
   );

@@ -119,12 +119,16 @@ export const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
     onNavigate(`/search?search=${encodeURIComponent(searchQuery.trim())}`);
   };
 
-  // Only announce a delivery policy when there is an actual charge to explain.
-  // With no fee configured the bar stays hidden rather than promising free
-  // delivery on the store's behalf.
-  const promoMessage =
-    !deliverySettings || deliverySettings.fee <= 0
-      ? null
+  // Announce whatever the seller has configured, including the free case.
+  // `mapDeliverySettings` already reports a fee of 0 when delivery charging is
+  // switched off in the Admin app, so "no charge configured" and "switched
+  // off" are one and the same here — and both mean free delivery, which the
+  // store does want advertised. Hidden only while the policy is still unknown
+  // (not yet loaded, or the request failed).
+  const promoMessage = !deliverySettings
+    ? null
+    : deliverySettings.fee <= 0
+      ? 'Free delivery on all orders, anywhere in India'
       : deliverySettings.freeThreshold !== null
         ? `Complimentary delivery on orders above ${formatCurrency(deliverySettings.freeThreshold)}`
         : `Flat ${formatCurrency(deliverySettings.fee)} delivery, anywhere in India`;

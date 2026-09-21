@@ -23,6 +23,7 @@ import { orderTotals } from '../lib/pricing';
 import type {
   Address,
   AddressInput,
+  ApiDeletionEligibility,
   CartItem,
   DeliverySettings,
   GenderCategory,
@@ -69,6 +70,21 @@ interface StoreContextType {
   updateProfile: (data: { fullName?: string; email?: string; phone?: string; avatarUrl?: string }) => Promise<boolean>;
   logout: () => void;
   refreshUser: () => Promise<void>;
+
+  // Account control
+  sendDeactivationOtp: () => Promise<boolean>;
+  /** Deactivates the account and ends the session. Reversible by signing in. */
+  deactivateAccount: (otp: string) => Promise<boolean>;
+  deletionEligibility: () => Promise<ApiDeletionEligibility | null>;
+  sendDeletionOtp: () => Promise<boolean>;
+  /** Permanently deletes the account and ends the session. No undo. */
+  deleteAccount: (data: {
+    otp: string;
+    reason: string;
+    acceptedTerms: boolean;
+    acknowledgedBalanceForfeit: boolean;
+    acknowledgedNoReturns: boolean;
+  }) => Promise<boolean>;
 
   // Cart
   cart: CartItem[];
@@ -351,7 +367,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     deliveryApi
       .settings()
       .then(s => setDeliverySettings(mapDeliverySettings(s)))
-      .catch(() => setDeliverySettings({ fee: 0, freeThreshold: null }));
+      // Leave the policy unknown (null) rather than inventing a free one: a
+      // fee of 0 now advertises "free delivery" on the header and home page,
+      // and a network hiccup must not put that promise on the store's behalf.
+      .catch(() => setDeliverySettings(null));
 
     (async () => {
       if (!hasToken()) {
@@ -393,9 +412,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const login = useCallback(
     async (email: string, password: string): Promise<boolean> => {
       try {
-        await authApi.login(email, password);
+        const result = await authApi.login(email, password);
         const profile = await completeSignIn();
-        showToast('Welcome Back', `Signed in as ${profile.fullName}.`, 'success');
+        // Signing in is how a deactivated account comes back, so say so
+        // rather than letting the restored data arrive unexplained.
+        if (result.reactivated) {
+          showToast(
+            'Account Reactivated',
+            `Welcome back, ${profile.fullName}. All of your data has been restored.`,
+            'success',
+          );
+        } else {
+          showToast('Welcome Back', `Signed in as ${profile.fullName}.`, 'success');
+        }
         return true;
       } catch (err) {
         showToast('Sign In Failed', errorMessage(err, 'Check your email and password and try again.'), 'error');
@@ -422,9 +451,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const loginWithOtp = useCallback(
     async (email: string, otp: string): Promise<boolean> => {
       try {
-        await authApi.loginWithOtp(email, otp);
+        const result = await authApi.loginWithOtp(email, otp);
         const profile = await completeSignIn();
-        showToast('Welcome Back', `Signed in as ${profile.fullName}.`, 'success');
+        if (result.reactivated) {
+          showToast(
+            'Account Reactivated',
+            `Welcome back, ${profile.fullName}. All of your data has been restored.`,
+            'success',
+          );
+        } else {
+          showToast('Welcome Back', `Signed in as ${profile.fullName}.`, 'success');
+        }
         return true;
       } catch (err) {
         showToast('Verification Failed', errorMessage(err, 'That code is not valid or has expired.'), 'error');
@@ -545,6 +582,86 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     clearSessionState();
     showToast('Signed Out', 'You have been signed out of Dristi Fashions.', 'info');
   }, [clearSessionState, showToast]);
+
+  /* -------------------------------------------------------------- */
+  /* Account control                                                 */
+  /* -------------------------------------------------------------- */
+
+  /** Drops the local session after the server has closed the account. */
+  const endSessionAfterAccountAction = useCallback(() => {
+    authApi.logout();
+    isAuthenticatedRef.current = false;
+    clearSessionState();
+  }, [clearSessionState]);
+
+  const sendDeactivationOtp = useCallback(async (): Promise<boolean> => {
+    try {
+      await authApi.sendDeactivationOtp();
+      return true;
+    } catch (err) {
+      showToast('Could Not Send Code', errorMessage(err), 'error');
+      return false;
+    }
+  }, [showToast]);
+
+  const deactivateAccount = useCallback(
+    async (otp: string): Promise<boolean> => {
+      try {
+        await authApi.deactivate(otp);
+        endSessionAfterAccountAction();
+        showToast(
+          'Account Deactivated',
+          'Nothing has been erased. Sign in again any time to restore it.',
+          'info',
+        );
+        return true;
+      } catch (err) {
+        showToast('Could Not Deactivate', errorMessage(err), 'error');
+        return false;
+      }
+    },
+    [endSessionAfterAccountAction, showToast],
+  );
+
+  const deletionEligibility = useCallback(async (): Promise<ApiDeletionEligibility | null> => {
+    try {
+      return await authApi.deletionEligibility();
+    } catch (err) {
+      showToast('Could Not Check Your Account', errorMessage(err), 'error');
+      return null;
+    }
+  }, [showToast]);
+
+  const sendDeletionOtp = useCallback(async (): Promise<boolean> => {
+    try {
+      await authApi.sendDeletionOtp();
+      return true;
+    } catch (err) {
+      showToast('Could Not Send Code', errorMessage(err), 'error');
+      return false;
+    }
+  }, [showToast]);
+
+  const deleteAccount = useCallback(
+    async (data: {
+      otp: string;
+      reason: string;
+      acceptedTerms: boolean;
+      acknowledgedBalanceForfeit: boolean;
+      acknowledgedNoReturns: boolean;
+    }): Promise<boolean> => {
+      try {
+        await authApi.deleteAccount(data);
+        endSessionAfterAccountAction();
+        showToast('Account Deleted', 'Your account has been permanently deleted.', 'info');
+        return true;
+      } catch (err) {
+        showToast('Could Not Delete Account', errorMessage(err), 'error');
+        return false;
+      }
+    },
+    [endSessionAfterAccountAction, showToast],
+  );
 
   /* -------------------------------------------------------------- */
   /* Cart actions                                                    */
@@ -847,6 +964,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     updateProfile,
     logout,
     refreshUser,
+
+    sendDeactivationOtp,
+    deactivateAccount,
+    deletionEligibility,
+    sendDeletionOtp,
+    deleteAccount,
 
     cart,
     cartLoading,

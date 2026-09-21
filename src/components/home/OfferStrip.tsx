@@ -4,27 +4,31 @@ import { useStore } from '../../context/StoreContext';
 import { formatCurrency } from '../../lib/format';
 
 /**
- * Explains the delivery charge, read from `/api/v1/delivery`, so the home page
+ * Explains the delivery policy, read from `/api/v1/delivery`, so the home page
  * quotes the same policy checkout applies.
  *
- * Renders nothing when no fee is configured: with nothing to charge there is
- * nothing to explain, and the store has not asked us to advertise delivery as
- * free.
+ * Renders nothing only until that policy has loaded. Once it has, a store with
+ * no charge configured — or with charging switched off in the Admin app, which
+ * arrives here as a fee of 0 — advertises free delivery rather than going
+ * quiet, because free delivery is worth saying out loud.
  */
 export const OfferStrip: React.FC = () => {
   const { deliverySettings } = useStore();
 
-  if (!deliverySettings || deliverySettings.fee <= 0) return null;
+  if (!deliverySettings) return null;
 
   const threshold = deliverySettings.freeThreshold;
+  const isFree = deliverySettings.fee <= 0;
 
-  const headline =
-    threshold !== null
+  const headline = isFree
+    ? 'Free delivery on every order'
+    : threshold !== null
       ? `Complimentary delivery on orders above ${formatCurrency(threshold)}`
       : `Flat ${formatCurrency(deliverySettings.fee)} delivery`;
 
-  const detail =
-    threshold !== null
+  const detail = isFree
+    ? 'No delivery charge, anywhere in India — the price you see is the price you pay.'
+    : threshold !== null
       ? `Orders below ${formatCurrency(threshold)} carry a ${formatCurrency(deliverySettings.fee)} delivery charge.`
       : 'Delivery is charged at a single flat rate, shown before you pay.';
 

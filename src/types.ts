@@ -24,6 +24,26 @@ export interface ApiUser {
   referralCode?: string | null;
   walletBalance: number;
   isVerified: boolean;
+  /** active | deactivated | deleted. A live session only ever sees "active". */
+  accountStatus?: string;
+  promotionalEmails?: boolean;
+}
+
+/** One reason an account cannot be deleted yet, ready to render as-is. */
+export interface ApiDeletionBlocker {
+  code: string;
+  message: string;
+  count: number;
+}
+
+export interface ApiDeletionEligibility {
+  canDelete: boolean;
+  blockers: ApiDeletionBlocker[];
+  pendingOrders: number;
+  pendingReturns: number;
+  walletBalance: number;
+  email: string;
+  phone?: string | null;
 }
 
 export interface ApiVariant {
@@ -480,6 +500,8 @@ export interface User {
   walletBalance: number;
   isVerified: boolean;
   role: string;
+  accountStatus: string;
+  promotionalEmails: boolean;
 }
 
 export interface Review {

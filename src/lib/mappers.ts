@@ -78,6 +78,8 @@ export function mapUser(api: ApiUser): User {
     walletBalance: api.walletBalance ?? 0,
     isVerified: api.isVerified,
     role: api.role,
+    accountStatus: api.accountStatus ?? 'active',
+    promotionalEmails: api.promotionalEmails ?? true,
   };
 }
 
