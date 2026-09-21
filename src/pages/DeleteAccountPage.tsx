@@ -235,6 +235,10 @@ export const DeleteAccountPage: React.FC<DeleteAccountPageProps> = ({ onNavigate
 
         {otpSent && (
           <div>
+            <p className="rounded-xl bg-[#f4f2ff] px-4 py-3 text-sm font-sans text-[#46464f] mb-3">
+              We have sent a 6-digit code to your registered email address,{' '}
+              <span className="font-semibold text-[#0d1648]">{user.email}</span>.
+            </p>
             <label className={`${sectionLabel} block mb-1.5`} htmlFor="delete-otp">
               Enter received OTP
             </label>

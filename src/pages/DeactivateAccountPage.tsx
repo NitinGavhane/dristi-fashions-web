@@ -125,9 +125,12 @@ export const DeactivateAccountPage: React.FC<DeactivateAccountPageProps> = ({ on
         </section>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="text-sm font-sans text-[#0d1648]">
-            <p className="font-semibold">{user.email}</p>
-            {user.phone && <p className="text-[#46464f]">{user.phone}</p>}
+          {/* Name the destination explicitly. This used to list the email
+              and the phone number side by side, which read as though the code
+              might arrive by SMS — it only ever goes to the email address. */}
+          <div className="rounded-xl bg-[#f4f2ff] px-4 py-3 text-sm font-sans text-[#46464f]">
+            We have sent a 6-digit code to your registered email address,{' '}
+            <span className="font-semibold text-[#0d1648]">{user.email}</span>.
           </div>
 
           <div>
